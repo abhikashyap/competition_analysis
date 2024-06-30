@@ -527,7 +527,7 @@ def make_a_request(fsn, max_retries=3):
                 # dict = all_specifications(info)
                 # for key, value in dict.items():
                 #     d[key] = value
-                d['all_specs'] = all_details
+                d['all_specs'] = all_details(info)
             except:
                 pass
             return d
