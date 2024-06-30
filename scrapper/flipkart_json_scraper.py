@@ -515,6 +515,5 @@ def scrape_all_fsns(fsns, max_retries=3):
     #         print(f"Error for FSN {fsn}: {str(e)}")
     scraped_data=[one_dict for one_dict in scraped_data if len(one_dict) > 0]
     df = pd.DataFrame(scraped_data)
-    fk_scrapper.flipkart_scraping_data(df)
     return df
 
