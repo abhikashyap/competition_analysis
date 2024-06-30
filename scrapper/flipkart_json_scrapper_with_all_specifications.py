@@ -10,7 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.chrome.options import Options
-from databases.scrapper import fk_scrapper
+# from databases.scrapper import fk_scrapper
 
 def collecting_Flipkart_Data(FSN):
 
@@ -459,6 +459,25 @@ def all_specifications(data):
         except:
             pass
     return key_dict
+def all_details(data):
+    specification_dict = {}
+    slots = data["RESPONSE"]["slots"]
+    for index in range(len(slots)):
+        
+        try:
+            renderable_components = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"]
+            for component in range(len(renderable_components)):
+                
+                specifications = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"][component]["value"]["attributes"]
+                for each_dict in specifications:
+                    values = list(each_dict.values())
+                    specification_dict[values[0]] = values[-1][0]
+                key = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"][component]["value"]["key"]
+
+            break
+        except:
+            pass
+    return specification_dict
 
 def all_specs(data):
     slots = data["RESPONSE"]["slots"]
@@ -505,9 +524,10 @@ def make_a_request(fsn, max_retries=3):
             except:
                 pass
             try:
-                dict = all_specifications(info)
-                for key, value in dict.items():
-                    d[key] = value
+                # dict = all_specifications(info)
+                # for key, value in dict.items():
+                #     d[key] = value
+                d['all_specs'] = all_details
             except:
                 pass
             return d
@@ -551,6 +571,6 @@ def scrape_all_fsns(fsns, max_retries=3):
     #         print(f"Error for FSN {fsn}: {str(e)}")
     scraped_data=[one_dict for one_dict in scraped_data if len(one_dict) > 0]
     df = pd.DataFrame(scraped_data)
-    fk_scrapper.flipkart_scraping_data(df)
+    # fk_scrapper.flipkart_scraping_data(df)
     return df
 
