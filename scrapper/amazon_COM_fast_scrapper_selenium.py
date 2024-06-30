@@ -15,10 +15,8 @@ from selenium.webdriver.chrome.options import Options
 import requests
 import json
 import random
-import schedule
-import re
-from databases.scrapper import az_scrapper
 
+import re
 class WebDriverManager:
     def __init__(self):
       pass

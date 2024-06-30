@@ -14,7 +14,7 @@ all_fsns=[]
 with st.container():
 
     keywords = st.text_input("Enter keywords to do competitive analysis")
-
+    
     if st.button('Submit'):
         st.write(f"Submitted keywords are  : {keywords}")
         list_of_keywords = keywords.split(",") 
@@ -25,13 +25,12 @@ with st.container():
             url=f'https://www.flipkart.com/search?q={list_of_keywords[i].strip().replace(" ", "%20")}'
 
             overall_progress.progress((i + 1) / len(list_of_keywords), text=f"{progress_text} ({i + 1}/{len(list_of_keywords)})")
-            fsns=sc.fns_scrap(sc.open_chrome_headless(),url,10)
+            fsns=sc.fns_scrap(sc.open_chrome_headless(),url,3)
             all_fsns.extend(fsns)
         overall_progress.progress(1.0, text="Scraping complete!")
     else:
         st.write("Enter Keywords")
-    overall_progress.progress(100)
-    overall_progress.empty()
+    
 
 # all_link_buttons=[]
 # for fsn in all_fsns:

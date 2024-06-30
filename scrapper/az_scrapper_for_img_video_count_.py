@@ -15,7 +15,6 @@ from piTask import general
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from databases.scrapper import az_scrapper
 import requests
 import json
 class WebDriverManager:

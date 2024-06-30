@@ -19,7 +19,7 @@ import json
 import random
 import schedule
 import re
-from databases.scrapper import az_scrapper
+
 
 class WebDriverManager:
     def __init__(self):

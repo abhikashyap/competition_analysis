@@ -10,7 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.chrome.options import Options
-# from databases.scrapper import fk_scrapper
+
 
 def collecting_Flipkart_Data(FSN):
 

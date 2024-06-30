@@ -1,5 +1,4 @@
 import time
-import schedule
 from selenium.webdriver.common.by import By
 import pandas as pd
 from selenium import webdriver
@@ -24,17 +23,12 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 import pickle
 import re
-from sqlalchemy import create_engine
 # import db_constants
-import yagmail
 import numpy as np
 import traceback
 import subprocess
-from . import database
 import pandas as pd
-import boto3
 from io import StringIO
-import aws.constants as constants
 
 
 from concurrent.futures import ThreadPoolExecutor
@@ -49,7 +43,7 @@ from selenium.webdriver.common.by import By
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from selenium.common.exceptions import WebDriverException
-from sqlalchemy import create_engine, MetaData, Table
+
 # if "/" in os.getcwd():
 #     address = os.getcwd() + "/inventory_files"
 # else:
@@ -1327,54 +1321,7 @@ def skip_on_seller_portal(driver,reload=True):
     print("pop up closed successfully")
     count +=1
 
-az_raw=constants.az_raw_bucket_name
-fk_raw=constants.fk_raw_bucket_name
-def send_to_s3_bucket(bucket_name,file_name,df):
-  aws_access_key_id = constants.aws_access_key_id
-  aws_secret_access_key = constants.aws_secret_access_key
-  bucket_name = bucket_name
-  csv_buffer = StringIO()
-  df.to_csv(csv_buffer, index=False)
-  s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
-  updated_file_name=file_name+"_"+datetime.now().strftime('%d_%m_%Y_%H_%M')+".csv"
-  s3.Object(bucket_name, updated_file_name).put(Body=csv_buffer.getvalue())
-    
 
-def pull_table_from_DB(database_url,table_name):
-    engine = create_engine(database_url)
-    # Reflect the existing database schema
-    metadata = MetaData()
-    metadata.reflect(bind=engine)
-
-    # Access the table you want to query
-    table = Table(table_name, metadata, autoload=True, autoload_with=engine)
-
-    # Build a select query
-    select_query = table.select()
-
-    # Execute the query and fetch the results
-    with engine.connect() as connection:
-        result = connection.execute(select_query)
-        rows = result.fetchall()
-
-    df=pd.DataFrame(rows)
-
-    return df
-
-
-
-def pull_latest_data_from_DB(database_url, table_name, account_name):
-    engine = create_engine(database_url)
-    
-    # Construct SQL query to fetch rows with maximum updated_date for the specified account name
-    sql_query = f"""
-        SELECT * FROM {table_name} WHERE account_name = '{account_name}' AND updated_date = ( SELECT MAX(updated_date) FROM {table_name}WHERE account_name = '{account_name}') """
-    
-    # Execute the query and fetch the results
-    with engine.connect() as connection:
-        df = pd.read_sql(sql_query, connection)
-
-    return df
 
     
 
