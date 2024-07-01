@@ -6,6 +6,7 @@ import pandas as pd
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
+import analysis_function as f
 st.set_page_config(layout="wide")
 
 competitor_data=pd.read_pickle('competitor_data.pkl')
@@ -37,28 +38,57 @@ max_price=final_scrapped_data['final_selling_price'].max()
 #     "Select Price to filter",
 #     min_price, max_price, (min_price, max_price))
 # st.write("Values:", price_filter)
-price_filter_col1,price_filter_col2=st.columns(2)
-with price_filter_col1:
+
+df_col1,df_col2,df_col3,df_col4=st.columns(4)
+with df_col1:
     lower_price=st.number_input("Insert the min price",value=min_price,step=50.0)
-with price_filter_col2:
+with df_col2:
     higher_price=st.number_input("Insert the max price",value=max_price,step=50.0)
+with df_col3:
+    rating_count=st.number_input("Insert ratings count",value=0.0,step=1.0)
+with df_col4:
+    review_count=st.number_input("Insert review counts",value=0.0,step=1.0)
 
 final_scrapped_data=final_scrapped_data[(final_scrapped_data['final_selling_price']>lower_price)&(final_scrapped_data['final_selling_price']<higher_price)]
+final_scrapped_data['ratings_count']=final_scrapped_data['ratings_count'].apply(lambda x: x if f.is_integer(x) else None)
+final_scrapped_data['reviews_count']=final_scrapped_data['reviews_count'].apply(lambda x: x if f.is_integer(x) else None)
+final_scrapped_data=final_scrapped_data[(final_scrapped_data['ratings_count']>=int(rating_count))]
+final_scrapped_data=final_scrapped_data[(final_scrapped_data['reviews_count']>=int(review_count))]
+
+
+metrics=st.multiselect("enter metrics to select",filtered_important_features)
+metric_to_filter={}
+for metric in metrics:
+    value=st.text_input(f"Enter search value for {metric}")
+    metric_to_filter[metric]=value
+
+for key,value in metric_to_filter.items():
+    final_scrapped_data=final_scrapped_data[final_scrapped_data[key].str.lower().str.contains(value)]
+st.write(metric_to_filter)
 st.dataframe(final_scrapped_data)
+st.markdown("# Product distributions")
 st.write(f"Total Product count : {len(final_scrapped_data)}")
 
+dominance_col1,dominance_col2=st.columns(2)
+with dominance_col1:
+    filter_out_less_product_count=st.number_input("Product count is greater than the inserted number is considered as others",value=3,step=1)
+    Brand_dominance=pd.DataFrame(final_scrapped_data['brand'].value_counts())
+    Brand_dominance.reset_index(inplace=True)
+    # Brand_dominance['Market_share']=Brand_dominance['count']*100/Brand_dominance['count'].sum()
+    Brand_dominance.loc[Brand_dominance['count']<int(filter_out_less_product_count),'Brand_type'] = 'others'
+    Brand_dominance['Brand_type'].fillna(Brand_dominance['brand'],inplace=True)
+    Brand_dominance.groupby('Brand_type')['count'].sum()
+    Brand_dominance_fig=px.pie(Brand_dominance, values='count', names='Brand_type', title=f'''Brand Dominance in price range {lower_price} to {higher_price} with count of product > {filter_out_less_product_count}''',height=800,width=1200)
+    st.plotly_chart(Brand_dominance_fig)
+with dominance_col2:
+    with st.expander("See details of count of product"):
+        st.dataframe(Brand_dominance)
+    other=Brand_dominance[Brand_dominance['count']<filter_out_less_product_count]
+    other_brands=other.groupby('count').agg({'brand': lambda x: list(x)})
+    other_brands.reset_index(inplace=True)
+    other_brands=other_brands.rename({'count':'No of products'},axis=1)
+    st.write(other_brands)
 
-
-filter_out_less_product_count=st.number_input("Product count is greater than the inserted number is considered as others",value=3,step=1)
-Brand_dominance=pd.DataFrame(final_scrapped_data['brand'].value_counts())
-Brand_dominance.reset_index(inplace=True)
-# Brand_dominance['Market_share']=Brand_dominance['count']*100/Brand_dominance['count'].sum()
-Brand_dominance.loc[Brand_dominance['count']<int(filter_out_less_product_count),'Brand_type'] = 'others'
-Brand_dominance['Brand_type'].fillna(Brand_dominance['brand'],inplace=True)
-Brand_dominance.groupby('Brand_type')['count'].sum()
-Brand_dominance_fig=px.pie(Brand_dominance, values='count', names='Brand_type', title=f'''Brand Dominance in price range {lower_price} to {higher_price} with count of product > 5''',height=800,width=1200)
-st.plotly_chart(Brand_dominance_fig)
-st.dataframe(Brand_dominance)
 
 
 #option
