@@ -59,12 +59,27 @@ final_scrapped_data=final_scrapped_data[(final_scrapped_data['reviews_count']>=i
 metrics=st.multiselect("enter metrics to select",filtered_important_features)
 metric_to_filter={}
 for metric in metrics:
-    value=st.text_input(f"Enter search value for {metric}")
-    metric_to_filter[metric]=value
+    option_values=final_scrapped_data[metric].unique().tolist()
+    metric_to_filter[metric]=option_values
 
 for key,value in metric_to_filter.items():
-    final_scrapped_data=final_scrapped_data[final_scrapped_data[key].str.lower().str.contains(value)]
-st.write(metric_to_filter)
+
+    selected_metric_col1,selected_metric_col2=st.columns(2)
+    with selected_metric_col1:
+        selected_field_value = st.multiselect(f"Enter selections for {key}", value)
+    with selected_metric_col2:
+        typed_value = st.text_input(f"search all for {key}")
+
+    if typed_value:
+        typed_value = str(typed_value).lower()
+        preselected_values = [str(v) for v in value if typed_value in str(v).lower()]
+        selected_field_value.extend(preselected_values)
+        selected_field_value = list(set(selected_field_value))
+
+    selected_field_value = [str(i).lower() for i in selected_field_value]
+
+    final_scrapped_data = final_scrapped_data[final_scrapped_data[key].astype(str).str.lower().isin(selected_field_value)]
+
 st.dataframe(final_scrapped_data)
 st.markdown("# Product distributions")
 st.write(f"Total Product count : {len(final_scrapped_data)}")
