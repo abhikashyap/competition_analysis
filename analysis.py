@@ -29,7 +29,7 @@ most_important_feature['feature_name']=feature_name
 most_important_feature['feature_count']=feature_count
 important_features=pd.DataFrame(most_important_feature)
 important_features['feautre_present_in_%_of_products']=important_features['feature_count']*100/important_features['feature_count'].max()
-filtered_important_features=important_features[important_features['feautre_present_in_%_of_products'] >=10]['feature_name'].to_list()
+filtered_important_features=important_features[important_features['feautre_present_in_%_of_products'] >=0]['feature_name'].to_list()
 final_scrapped_data=brand_level_data[filtered_important_features]
 final_scrapped_data['final_selling_price']=final_scrapped_data['final_selling_price'].astype(float)
 min_price=final_scrapped_data['final_selling_price'].min()
@@ -143,7 +143,7 @@ all_discription_filter.extend(['brand','fsn'])
 
 feature_df=features_to_analyze[all_discription_filter]
 
-features_after_not_unique=[description for description in feature_df if feature_df[description].nunique()>1]
+features_after_not_unique=[description for description in feature_df if feature_df[description].nunique()>0]
 feature_df
 for fe in features_after_not_unique:
     if (fe not in ['brand', 'fsn']) and ('warranty' not in fe.lower()):

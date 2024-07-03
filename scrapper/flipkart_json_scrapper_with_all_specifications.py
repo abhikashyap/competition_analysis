@@ -455,29 +455,13 @@ def all_specifications(data):
                     specification_dict[values[0]] = values[-1][0]
                 key = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"][component]["value"]["key"]
                 key_dict[key] = specification_dict
+            k = {}
+            for key, value in key_dict.items():
+                k.update(value)
             break
         except:
             pass
-    return key_dict
-def all_details(data):
-    specification_dict = {}
-    slots = data["RESPONSE"]["slots"]
-    for index in range(len(slots)):
-        
-        try:
-            renderable_components = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"]
-            for component in range(len(renderable_components)):
-                
-                specifications = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"][component]["value"]["attributes"]
-                for each_dict in specifications:
-                    values = list(each_dict.values())
-                    specification_dict[values[0]] = values[-1][0]
-                key = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"][component]["value"]["key"]
-
-            break
-        except:
-            pass
-    return specification_dict
+    return k
 
 def all_specs(data):
     slots = data["RESPONSE"]["slots"]
@@ -524,10 +508,7 @@ def make_a_request(fsn, max_retries=3):
             except:
                 pass
             try:
-                # dict = all_specifications(info)
-                # for key, value in dict.items():
-                #     d[key] = value
-                d['all_specs'] = all_details(info)
+                d["all_specs"] = all_specifications(info)
             except:
                 pass
             return d
