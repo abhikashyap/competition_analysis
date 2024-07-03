@@ -147,11 +147,14 @@ if len(all_fsns) > 0:
         other_brands.reset_index(inplace=True)
         other_brands=other_brands.rename({'count':'No of products'},axis=1)
         st.write(other_brands)
-        rating_df=final_scrapped_data.groupby('brand').agg({"ratings_count":"sum"})
+        rating_df=final_scrapped_data.groupby('brand').agg({"ratings_count":"sum","fsn":"count"})
         rating_df.reset_index(inplace=True)
         rating_df=rating_df.sort_values(by='ratings_count',ascending=False).head(20)
         # rating_pie=px.bar(rating_df, y='ratings_count', x='brand',height=800,width=1200)
-        rating_pie=px.pie(rating_df, values='ratings_count', names='brand',height=600,width=1000)
+        rating_pie=px.pie(rating_df, values='ratings_count', names='brand',custom_data=['fsn'],height=600,width=1000)
+        rating_pie.update_traces(
+        hovertemplate='<b>%{label}</b><br>Ratings Count: %{value}<br>FSN: %{customdata[0]}<extra></extra>'
+        )
         st.plotly_chart(rating_pie)
     with st.container():
         price_col1,price_col2=st.columns(2)
