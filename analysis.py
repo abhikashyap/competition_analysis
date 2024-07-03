@@ -132,7 +132,41 @@ with st.container():
         brand_presence_with_count_of_fsn=px.pie(brand_info, values='count_of_products', names='brand')
         st.plotly_chart(brand_presence_with_count_of_fsn)
 
-# #option
+
+rating_df=final_scrapped_data.groupby('brand').agg({"ratings_count":"sum"})
+rating_df.reset_index(inplace=True)
+all_discription_filter=list(set(filtered_important_features).difference(set(competitor_data.columns.tolist())))
+list_of_brand=st.text_input("Enter list of brands ",value='boAt')
+list_of_brand=[str(i) for i in list_of_brand.split(',')]
+features_to_analyze=final_scrapped_data[final_scrapped_data['brand'].isin(list_of_brand) & final_scrapped_data['final_selling_price'].isin(list_of_price)]
+all_discription_filter.extend(['brand','fsn'])
+
+feature_df=features_to_analyze[all_discription_filter]
+
+features_after_not_unique=[description for description in feature_df if feature_df[description].nunique()>1]
+feature_df
+for fe in features_after_not_unique:
+    if (fe not in ['brand', 'fsn']) and ('warranty' not in fe.lower()):
+        feature_col1,feature_col2=st.columns(2)
+        
+        with feature_col1:
+            st.markdown(f"##### Comparison for {fe}")
+        
+            feature_df_temp=feature_df[features_after_not_unique]
+            feature_df_temp_grouped=feature_df_temp.groupby(['brand',fe]).agg({"fsn":["count",list]})
+            feature_df_temp_grouped.reset_index(inplace=True)
+            feature_df_temp_grouped.columns=[" ".join(i) for i in feature_df_temp_grouped.columns]
+                
+            st.dataframe(feature_df_temp_grouped)
+        with feature_col2:
+        
+            fe_distribution=pd.DataFrame(final_scrapped_data[fe].value_counts())
+            fe_distribution.reset_index(inplace=True)
+            fe_distribution_pie=fe_distribution.sort_values(by='count',ascending=False).head(10)
+            fe_fig=px.pie(fe_distribution_pie,values='count',names=fe,title=f'Feature Importance Of {fe} in market')
+            st.plotly_chart(fe_fig)
+    # st.write(feature_df_temp_grouped)
+# # #option
 # options_to_select = []
 # for column in filtered_important_features:
 #     if column not in competitor_data.columns.to_list():
