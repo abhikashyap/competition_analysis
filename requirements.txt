@@ -8,3 +8,4 @@ streamlit
 requests
 httpx
 nbformat
+statsmodels

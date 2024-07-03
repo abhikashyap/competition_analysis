@@ -103,35 +103,61 @@ with dominance_col2:
     other_brands.reset_index(inplace=True)
     other_brands=other_brands.rename({'count':'No of products'},axis=1)
     st.write(other_brands)
+    rating_df=final_scrapped_data.groupby('brand').agg({"ratings_count":"sum"})
+    rating_df.reset_index(inplace=True)
+    rating_df=rating_df.sort_values(by='ratings_count',ascending=False).head(20)
+    # rating_pie=px.bar(rating_df, y='ratings_count', x='brand',height=800,width=1200)
+    rating_pie=px.pie(rating_df, values='ratings_count', names='brand',height=600,width=1000)
+    st.plotly_chart(rating_pie)
+with st.container():
+    price_col1,price_col2=st.columns(2)
+    with price_col1:
+        price_hist=px.histogram(final_scrapped_data, x='final_selling_price', nbins=10,height=1000,width=1000, title='Distribution of Final Selling Prices')
+        st.plotly_chart(price_hist)
 
+    price_vs_ratings=final_scrapped_data.groupby('final_selling_price').agg({'ratings_count':'sum'})
+    price_vs_ratings.reset_index(inplace=True)
+    with price_col2:
+        rating_hist=px.scatter(price_vs_ratings, x='final_selling_price', y='ratings_count', 
+                        title='Scatter Plot of Final Selling Price vs Ratings Count',
+                        labels={'final_selling_price': 'Final Selling Price', 'ratings_count': 'Ratings Count'},
+                        trendline="ols")
 
+        st.plotly_chart(rating_hist)
+        list_of_price=st.text_input("Enter list of price ",value=int(price_vs_ratings['final_selling_price'].values[0]))
+        list_of_price=[int(i) for i in list_of_price.split(',')]
+        brand_info=final_scrapped_data[final_scrapped_data['final_selling_price'].isin(list_of_price)]
+        brand_info=brand_info.groupby('brand').agg({"brand":"count"}).rename({"brand":"count_of_products"},axis=1)
+        brand_info.reset_index(inplace=True)
+        brand_presence_with_count_of_fsn=px.pie(brand_info, values='count_of_products', names='brand')
+        st.plotly_chart(brand_presence_with_count_of_fsn)
 
-#option
-options_to_select = []
-for column in filtered_important_features:
-    if column not in competitor_data.columns.to_list():
-        options_to_select.append(column)
-option = st.selectbox(
-    "Select Feature",
-    tuple(options_to_select))
+# #option
+# options_to_select = []
+# for column in filtered_important_features:
+#     if column not in competitor_data.columns.to_list():
+#         options_to_select.append(column)
+# option = st.selectbox(
+#     "Select Feature",
+#     tuple(options_to_select))
 
-feature=final_scrapped_data.copy()
-col1,col2=st.columns(2)
-color=feature.groupby(['brand',option]).agg({"fsn":'count'}).rename({'fsn':"count_of_products"},axis=1)
-color.reset_index(inplace=True)
-color=color.sort_values(by='count_of_products',ascending=False)
-top_to_color=color.head(10)
+# feature=final_scrapped_data.copy()
+# col1,col2=st.columns(2)
+# color=feature.groupby(['brand',option]).agg({"fsn":'count'}).rename({'fsn':"count_of_products"},axis=1)
+# color.reset_index(inplace=True)
+# color=color.sort_values(by='count_of_products',ascending=False)
+# top_to_color=color.head(10)
 
-fig = px.sunburst(top_to_color, values='count_of_products', path=['brand', option], title=f'Feature Importance Of {option}',height=800,width=1200)
-st.dataframe(color)
-with col1:
-    st.plotly_chart(fig, use_container_width=False)
-with col2:
-    color_overall=feature.groupby([option]).agg({"fsn":'count'}).rename({'fsn':"count_of_products"},axis=1)
-    color_overall.reset_index(inplace=True)
-    color_overall=color_overall.sort_values(by='count_of_products',ascending=False)
-    top_to_color_overall=color_overall.head(10)
-    pie= px.pie(top_to_color_overall, values='count_of_products', names=option, title=f'Feature Importance Of {option} in market',height=800,width=1200)
-    st.plotly_chart(pie)
+# fig = px.sunburst(top_to_color, values='count_of_products', path=['brand', option], title=f'Feature Importance Of {option}',height=800,width=1200)
+# st.dataframe(color)
+# with col1:
+#     st.plotly_chart(fig, use_container_width=False)
+# with col2:
+#     color_overall=feature.groupby([option]).agg({"fsn":'count'}).rename({'fsn':"count_of_products"},axis=1)
+#     color_overall.reset_index(inplace=True)
+#     color_overall=color_overall.sort_values(by='count_of_products',ascending=False)
+#     top_to_color_overall=color_overall.head(10)
+#     pie= px.pie(top_to_color_overall, values='count_of_products', names=option, title=f'Feature Importance Of {option} in market',height=800,width=1200)
+#     st.plotly_chart(pie)
     
 
