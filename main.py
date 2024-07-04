@@ -35,8 +35,9 @@ with st.container():
 
             overall_progress.progress((i + 1) / len(list_of_keywords), text=f"{progress_text} ({i + 1}/{len(list_of_keywords)})")
             st.session_state['all_fsns'] = all_fsns
-
-            fsns=sc.fns_scrap(sc.open_chrome_headless(),url,3)
+            driver=sc.open_chrome_headless()
+            fsns=sc.fns_scrap(driver,url,3)
+            driver.quit()
             all_fsns.extend(fsns)
         overall_progress.progress(1.0, text="Scraping complete!")
     else:

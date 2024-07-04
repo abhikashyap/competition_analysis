@@ -9,3 +9,19 @@ requests
 httpx
 nbformat
 statsmodels
+prefect
+selenium
+bs4
+httpx
+fuzzywuzzy
+selectolax
+
+
+# graph resgression brand name and product detail
+# price range
+#  rating analysis
+# case sensititvity remove
+# input list of fsnsrecommendation in gap in market
+# input opf apple to apple comparision
+# discription datatype
+# list of brand default is boat

@@ -1,0 +1,39 @@
+version: "3"
+services:
+  chrome:
+    image: selenium/standalone-chrome:123.0
+    shm_size: 2gb
+    container_name: selenium
+    environment:
+      - SEL_DOWNLOAD_DIR=/home/seluser
+      - GRID_BROWSER_TIMEOUT=7200
+      - GRID_TIMEOUT=7200
+      - SE_NODE_MAX_SESSIONS=10
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true 
+    restart: always
+    volumes:
+      - data_volume:/home/seluser
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+      - "7900:7900"
+
+  my_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: 637423481837.dkr.ecr.us-east-1.amazonaws.com/automation:v56
+    # depends_on:
+    #   - chrome
+    volumes:
+      - data_volume:/home/seluser
+    ports:
+      - "80:80"
+    environment:
+      - STREAMLIT_SERVER_PORT=80
+volumes:
+  data_volume:
+
+
+

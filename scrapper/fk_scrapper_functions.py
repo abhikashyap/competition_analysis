@@ -12,9 +12,10 @@ import numpy as np
 
 
 def open_chrome_headless():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(options=chrome_options)
+    options = Options()
+    options.add_argument("--headless")
+    # driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Remote(command_executor="http://selenium:4444/wd/hub",options=options)
     return driver
 
 
