@@ -22,8 +22,8 @@ headers = {
 # 'Sec-Fetch-Mode': 'cors',
 # 'Sec-Fetch-Site': 'same-site',
 # 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-'X-User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 FKUA/website/42/website/Desktop',
-'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+  'X-User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 FKUA/website/42/website/Desktop',
+  'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Brave";v="126"',
 # 'sec-ch-ua-mobile': '?0',
 # 'sec-ch-ua-platform': '"Linux"'
 }
@@ -31,4 +31,9 @@ headers = {
 response = requests.request("POST", url, headers=headers, data=payload)
 
 print(response)
+print(response.text)
+
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
 print(response.text)
