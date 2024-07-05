@@ -83,4 +83,21 @@ def scrap(FSN):
     except Exception as err:
         # print(f"Other error occurred: {err}")
         pass  # Python 3.6
-    return df,response_code,response_header
+    return json.loads(response.text)
+
+def title(data):
+    title = ""
+    try:
+        
+        if 'subtitle' in data['RESPONSE']['pageData']['pageContext']['titles']:
+            title = data['RESPONSE']['pageData']['pageContext']['seo']['title'] + \
+                ' ' + data['RESPONSE']['pageData']['pageContext']['titles']['subtitle']
+        else:
+            title = data['RESPONSE']['pageData']['pageContext']['seo']['title']
+    except:
+        pass
+    return title
+def title_scrap(FSN):
+    data=scrap(FSN)
+    title_text=title(data)
+    return title_text
