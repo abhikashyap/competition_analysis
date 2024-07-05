@@ -97,7 +97,23 @@ def title(data):
     except:
         pass
     return title
+def final_selling_price(data):
+    final_selling_price = ""
+    try:
+        
+        if 'pageData' in data['RESPONSE']:
+            if 'pageContext' in data['RESPONSE']['pageData']:
+                if 'fdpEventTracking' in data['RESPONSE']['pageData']['pageContext']:
+                    if 'events' in data['RESPONSE']['pageData']['pageContext']['fdpEventTracking']:
+                        if 'psi' in data['RESPONSE']['pageData']['pageContext']['fdpEventTracking']['events']:
+                            if 'ppd' in data['RESPONSE']['pageData']['pageContext']['fdpEventTracking']['events']['psi']:
+                                if 'finalPrice' in data['RESPONSE']['pageData']['pageContext']['fdpEventTracking']['events']['psi']['ppd']:
+                                    final_selling_price = data['RESPONSE']['pageData']['pageContext'][
+                                        'fdpEventTracking']['events']['psi']['ppd']['finalPrice']
+    except:
+        pass
+    return final_selling_price
 def title_scrap(FSN):
     data=scrap(FSN)
-    title_text=title(data)
+    title_text=final_selling_price(data)
     return title_text
