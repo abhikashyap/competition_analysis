@@ -37,7 +37,7 @@ with st.container():
             st.session_state['all_fsns'] = all_fsns
             driver=sc.open_chrome_headless()
             fsns=sc.fns_scrap(driver,url,1)
-            # driver.quit()
+            driver.quit()
             all_fsns.extend(fsns)
         overall_progress.progress(1.0, text="Scraping complete!")
     else:
@@ -47,6 +47,7 @@ with st.container():
 st.write(f"Total no of product id collected is {len(all_fsns)}")
 if len(all_fsns) > 0:
     final_fsn_list = list(set(all_fsns))
+    st.write(final_fsn_list)
     if st.session_state['competitor_data'].empty:
         st.session_state['competitor_data'] = fk_scrapper.scrape_all_fsns(final_fsn_list)
     
