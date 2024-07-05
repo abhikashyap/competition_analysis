@@ -47,15 +47,16 @@ def collecting_Flipkart_Data(FSN):
     try:
         response = httpx.post(url, headers=headers, content=payload)
         response.raise_for_status()  # Raises HTTPStatusError for bad responses (4xx and 5xx)
-        print(f"Response status code: {response.status_code}")
-        print(f"Response headers: {response.headers}")
+        # print(f"Response status code: {response.status_code}")
+        # print(f"Response headers: {response.headers}")
 
-    except httpx.HTTPStatusError as http_err:
-        print(f"HTTP error occurred: {http_err}")  # Python 3.6
-        print(f"Response status code: {response.status_code}")
+    # except httpx.HTTPStatusError as http_err:
+    #     print(f"HTTP error occurred: {http_err}")  # Python 3.6
+    #     print(f"Response status code: {response.status_code}")
 
     except Exception as err:
-        print(f"Other error occurred: {err}")  # Python 3.6
+        pass
+        # print(f"Other error occurred: {err}")  # Python 3.6
     data = json.loads(response.text)
     return data
 
@@ -112,17 +113,17 @@ def fk_other_seller_info_api(fsn):
         'sec-ch-ua-platform': '"Linux"'
     }
 
-    try:
-        response = httpx.post(url, headers=headers, content=payload)
-        response.raise_for_status()  # Raises HTTPStatusError for bad responses (4xx and 5xx)
+
+    response = httpx.post(url, headers=headers, content=payload)
+  # Raises HTTPStatusError for bad responses (4xx and 5xx)
         # data = response.json()
         # return data
-    except httpx.HTTPStatusError as http_err:
-        print(f"HTTP error occurred: {http_err}")  # Python 3.6
-        print(f"Response status code: {response.status_code}")
-        # print(f"Response body: {response.text}")
-    except Exception as err:
-        print(f"Other error occurred: {err}")  # Python 3.6
+    # except httpx.HTTPStatusError as http_err:
+    #     print(f"HTTP error occurred: {http_err}")  # Python 3.6
+    #     print(f"Response status code: {response.status_code}")
+    #     # print(f"Response body: {response.text}")
+    # except Exception as err:
+    #     print(f"Other error occurred: {err}")  # Python 3.6
     data=json.loads(response.text)
     return data
 
