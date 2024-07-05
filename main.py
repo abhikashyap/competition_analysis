@@ -51,6 +51,7 @@ if len(all_fsns) > 0:
         st.session_state['competitor_data'] = fk_scrapper.scrape_all_fsns(final_fsn_list)
     
     competitor_data = st.session_state['competitor_data']
+    st.write(competitor_data)
     
     if not competitor_data.empty:
         competitor_data['brand'] = competitor_data['title'].str.split(" ").str[0]
