@@ -56,7 +56,8 @@ if len(all_fsns) > 0:
         competitor_data['brand'] = competitor_data['title'].str.split(" ").str[0]
         
         brand_level_data = competitor_data.copy()
-    brand_level_data.to_pickle("competitor_data1.pkl")
+    # brand_level_data.to_pickle("competitor_data1.pkl")
+    st.write(brand_level_data)
     for index, row in brand_level_data.iterrows():
         specs = row['all_specs']
         for key, value in specs.items():
