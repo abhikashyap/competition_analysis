@@ -89,32 +89,32 @@ def collecting_Flipkart_Data(FSN):
 
 #     data=json.loads(response.text)
 #     return data
-def fk_other_seller_info_api(fsn):
-    url = "https://2.rome.api.flipkart.com/api/3/page/dynamic/product-sellers"
+# def fk_other_seller_info_api(fsn):
+#     url = "https://2.rome.api.flipkart.com/api/3/page/dynamic/product-sellers"
 
-    payload = json.dumps({
-        "requestContext": {
-            "productId": fsn
-        },
-        "locationContext": {}
-    })
-    headers = {
-        'Content-Type': 'application/json',
-        'Accept-Language': 'en-US,en;q=0.9,en-IN;q=0.8',
-        'Cookie': 'T=SD.7673f33b-ed73-4c2d-9c41-0f3bfff898c0.1697997323823; _gcl_au=1.1.609917794.1697997325; at=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFkOTYzYzUwLTM0YjctNDA1OC1iMTNmLWY2NDhiODFjYTBkYSJ9.eyJleHAiOjE2OTk3ODU4OTEsImlhdCI6MTY5ODA1Nzg5MSwiaXNzIjoia2V2bGFyIiwianRpIjoiZGViYTk5NTItZWYwZC00OGYyLTg2MTgtZTdhZThiMmE4ZjRjIiwidHlwZSI6IkFUIiwiZElkIjoiU0QuNzY3M2YzM2ItZWQ3My00YzJkLTljNDEtMGYzYmZmZjg5OGMwLjE2OTc5OTczMjM4MjMiLCJrZXZJZCI6IlZJODczMTU5MUI3QkZENDYwQ0FCQzQwMkU2MEM2MUIxRkMiLCJ0SWQiOiJtYXBpIiwidnMiOiJMTyIsInoiOiJIWUQiLCJtIjp0cnVlLCJnZW4iOjR9.vZinRn_V98wzIIZ4cINaJoVsHETxMdUO-GdoVaDLEk4; K-ACTION=null; vh=944; vw=1920; dpr=1; _pxvid=33951c97-7191-11ee-8c84-54525af8b9ad; AMCV_55CFEDA0570C3FA17F000101%40AdobeOrg=-227196251%7CMCIDTS%7C19659%7CMCMID%7C75907747707542419911271218439759702261%7CMCAID%7CNONE; _gid=GA1.2.1508938059.1698474410; _ga=GA1.1.7334968.1697997325; _ga_0SJLGHBL81=GS1.1.1698474410.3.1.1698474715.0.0.0; _ga_TVF0VCMCT3=GS1.1.1698474410.3.1.1698474715.60.0.0; pxcts=b679308e-755b-11ee-8b89-966d8cf69a7a; AMCVS_17EB401053DAF4840A490D4C%40AdobeOrg=1; AMCV_17EB401053DAF4840A490D4C%40AdobeOrg=-227196251%7CMCIDTS%7C19659%7CMCMID%7C69790193157414311032196335614131668850%7CMCAAMLH-1698662694%7C12%7CMCAAMB-1699079526%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1698481926s%7CNONE%7CMCAID%7CNONE; Network-Type=4g; s_sq=flipkart-prd%3D%2526pid%253Dwww.flipkart.com%25253Amotorola-edge-40-nebula-green-256-gb%25253Ap%25253Aitmaa0bf9c327a2b%2526pidt%253D1%2526oid%253DfunctionSr%252528%252529%25257B%25257D%2526oidt%253D2%2526ot%253DSUBMIT; S=d1t11aD9zPwxAFz9LPRJ/V14/P0IcH6KMbBhSv5LFVD7NEPZfY9g3ewjTuLhgNWqgPJnxkMfu/+IjFQ2gVVVepRvUog==; _px3=d84a84171eff186b6087b179779f570bcdb40f8c77b17ebed345f601b4d90a47:ByOdQmYADre9+tzJwqnbkP+HBnPq45pAPiRshP9FI9tl2LznP9wRPAe/DdIcQobc/b3UZELaQ69UgzHtQfZTvA==:1000:zIQq5kOkzAHQEa8e7iIulRqUmCwpyOCuaUGRsvGK1nFK0bVooYQmstLf6StA6Knar6xlfPHRN0ceDnf2f6zZD0q3IvOAKRXorElY+a00/PKtOvd56DRXe5h6SPDobHY9utyDSu6YiIWXcJDqtAnUXVlrfC+mPgMwCoijl12o7Pa3+257Zwt32Fq02ucNLFTLtZYIu5IN89Hdm3nxR+BFyommPJ2Hc50omHEQJEZYN4w=; SN=VI8731591B7BFD460CABC402E60C61B1FC.TOKEDDE7E8A0D334914AADAC4783F123602.1698482505.LO',
-        'Origin': 'https://www.flipkart.com',
-        'Referer': 'https://www.flipkart.com/',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-site',
-        'X-User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 FKUA/website/42/website/Desktop',
-        'sec-ch-ua': '"Chromium";v="118", "Google Chrome";v="118", "Not=A?Brand";v="99"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Linux"'
-    }
+#     payload = json.dumps({
+#         "requestContext": {
+#             "productId": fsn
+#         },
+#         "locationContext": {}
+#     })
+#     headers = {
+#         'Content-Type': 'application/json',
+#         'Accept-Language': 'en-US,en;q=0.9,en-IN;q=0.8',
+#         'Cookie': 'T=SD.7673f33b-ed73-4c2d-9c41-0f3bfff898c0.1697997323823; _gcl_au=1.1.609917794.1697997325; at=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFkOTYzYzUwLTM0YjctNDA1OC1iMTNmLWY2NDhiODFjYTBkYSJ9.eyJleHAiOjE2OTk3ODU4OTEsImlhdCI6MTY5ODA1Nzg5MSwiaXNzIjoia2V2bGFyIiwianRpIjoiZGViYTk5NTItZWYwZC00OGYyLTg2MTgtZTdhZThiMmE4ZjRjIiwidHlwZSI6IkFUIiwiZElkIjoiU0QuNzY3M2YzM2ItZWQ3My00YzJkLTljNDEtMGYzYmZmZjg5OGMwLjE2OTc5OTczMjM4MjMiLCJrZXZJZCI6IlZJODczMTU5MUI3QkZENDYwQ0FCQzQwMkU2MEM2MUIxRkMiLCJ0SWQiOiJtYXBpIiwidnMiOiJMTyIsInoiOiJIWUQiLCJtIjp0cnVlLCJnZW4iOjR9.vZinRn_V98wzIIZ4cINaJoVsHETxMdUO-GdoVaDLEk4; K-ACTION=null; vh=944; vw=1920; dpr=1; _pxvid=33951c97-7191-11ee-8c84-54525af8b9ad; AMCV_55CFEDA0570C3FA17F000101%40AdobeOrg=-227196251%7CMCIDTS%7C19659%7CMCMID%7C75907747707542419911271218439759702261%7CMCAID%7CNONE; _gid=GA1.2.1508938059.1698474410; _ga=GA1.1.7334968.1697997325; _ga_0SJLGHBL81=GS1.1.1698474410.3.1.1698474715.0.0.0; _ga_TVF0VCMCT3=GS1.1.1698474410.3.1.1698474715.60.0.0; pxcts=b679308e-755b-11ee-8b89-966d8cf69a7a; AMCVS_17EB401053DAF4840A490D4C%40AdobeOrg=1; AMCV_17EB401053DAF4840A490D4C%40AdobeOrg=-227196251%7CMCIDTS%7C19659%7CMCMID%7C69790193157414311032196335614131668850%7CMCAAMLH-1698662694%7C12%7CMCAAMB-1699079526%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1698481926s%7CNONE%7CMCAID%7CNONE; Network-Type=4g; s_sq=flipkart-prd%3D%2526pid%253Dwww.flipkart.com%25253Amotorola-edge-40-nebula-green-256-gb%25253Ap%25253Aitmaa0bf9c327a2b%2526pidt%253D1%2526oid%253DfunctionSr%252528%252529%25257B%25257D%2526oidt%253D2%2526ot%253DSUBMIT; S=d1t11aD9zPwxAFz9LPRJ/V14/P0IcH6KMbBhSv5LFVD7NEPZfY9g3ewjTuLhgNWqgPJnxkMfu/+IjFQ2gVVVepRvUog==; _px3=d84a84171eff186b6087b179779f570bcdb40f8c77b17ebed345f601b4d90a47:ByOdQmYADre9+tzJwqnbkP+HBnPq45pAPiRshP9FI9tl2LznP9wRPAe/DdIcQobc/b3UZELaQ69UgzHtQfZTvA==:1000:zIQq5kOkzAHQEa8e7iIulRqUmCwpyOCuaUGRsvGK1nFK0bVooYQmstLf6StA6Knar6xlfPHRN0ceDnf2f6zZD0q3IvOAKRXorElY+a00/PKtOvd56DRXe5h6SPDobHY9utyDSu6YiIWXcJDqtAnUXVlrfC+mPgMwCoijl12o7Pa3+257Zwt32Fq02ucNLFTLtZYIu5IN89Hdm3nxR+BFyommPJ2Hc50omHEQJEZYN4w=; SN=VI8731591B7BFD460CABC402E60C61B1FC.TOKEDDE7E8A0D334914AADAC4783F123602.1698482505.LO',
+#         'Origin': 'https://www.flipkart.com',
+#         'Referer': 'https://www.flipkart.com/',
+#         'Sec-Fetch-Dest': 'empty',
+#         'Sec-Fetch-Mode': 'cors',
+#         'Sec-Fetch-Site': 'same-site',
+#         'X-User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 FKUA/website/42/website/Desktop',
+#         'sec-ch-ua': '"Chromium";v="118", "Google Chrome";v="118", "Not=A?Brand";v="99"',
+#         'sec-ch-ua-mobile': '?0',
+#         'sec-ch-ua-platform': '"Linux"'
+#     }
 
 
-    response = httpx.post(url, headers=headers, content=payload)
+#     response = httpx.post(url, headers=headers, content=payload)
   # Raises HTTPStatusError for bad responses (4xx and 5xx)
         # data = response.json()
         # return data
@@ -441,18 +441,18 @@ def productVideosCount(data):
         pass
     return product_video_count
 
-def other_seller_info(fsn):
-    api_data=fk_other_seller_info_api(fsn)
-    api_details = {}
-    try:
-        no_of_other_seller = len(api_data['RESPONSE']['data']['product_seller_detail_1']['data'])
-        for i in range(no_of_other_seller):
-            key_api = api_data['RESPONSE']['data']['product_seller_detail_1']['data'][i]['value']['sellerInfo']['value']['name']
-            value_api= api_data['RESPONSE']['data']['product_seller_detail_1']['data'][i]['value']['metadata']['price']
-            api_details[key_api] = value_api
-    except:
-        pass
-    return api_details
+# def other_seller_info(fsn):
+#     api_data=fk_other_seller_info_api(fsn)
+#     api_details = {}
+#     try:
+#         no_of_other_seller = len(api_data['RESPONSE']['data']['product_seller_detail_1']['data'])
+#         for i in range(no_of_other_seller):
+#             key_api = api_data['RESPONSE']['data']['product_seller_detail_1']['data'][i]['value']['sellerInfo']['value']['name']
+#             value_api= api_data['RESPONSE']['data']['product_seller_detail_1']['data'][i]['value']['metadata']['price']
+#             api_details[key_api] = value_api
+#     except:
+#         pass
+#     return api_details
 def flipkartAssured(data):
     flipkart_assured=''
     try:
@@ -547,7 +547,7 @@ def make_a_request(fsn, max_retries=3):
             d['description'] = description(info)
             d['productDescription'] = productDescription(info)
             d['specifications'] = specifications(info)
-            d['fk_other_seller_info'] = other_seller_info(fsn)
+            # d['fk_other_seller_info'] = other_seller_info(fsn)
             d['reviews'] = reviews(info)
             d['productImagesCount'] = productImagesCount(info)
             d['productVideosCount'] = productVideosCount(info)
