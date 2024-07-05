@@ -72,9 +72,9 @@ headers = {
 try:
     response = httpx.post(url, headers=headers, content=payload)
     response.raise_for_status()  # Raises HTTPStatusError for bad responses (4xx and 5xx)
-    # print(f"Response status code: {response.status_code}")
-    # print(f"Response headers: {response.headers}")
-    # print(f"Response body: {response.text}")
+    print(f"Response status code: {response.status_code}")
+    print(f"Response headers: {response.headers}")
+    print(f"Response body: {response.text}")
 except httpx.HTTPStatusError as http_err:
     pass
     # print(f"HTTP error occurred: {http_err}")  # Python 3.6
