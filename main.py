@@ -37,7 +37,7 @@ with st.container():
             st.session_state['all_fsns'] = all_fsns
             driver=sc.open_chrome_headless()
             fsns=sc.fns_scrap(driver,url,3)
-            driver.quit()
+            # driver.quit()
             all_fsns.extend(fsns)
         overall_progress.progress(1.0, text="Scraping complete!")
     else:
