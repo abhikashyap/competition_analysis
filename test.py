@@ -37,7 +37,7 @@
 # response = requests.request("POST", url, headers=headers, data=payload)
 
 # print(response.text)
-import requests
+import httpx
 import json
 
 FSN = 'MOBGT4RZUPKD8HDK'
@@ -56,12 +56,13 @@ headers = {
 }
 
 try:
-    response = requests.post(url, headers=headers, data=payload)
-    response.raise_for_status()  # Raises HTTPError for bad responses (4xx and 5xx)
+    response = httpx.post(url, headers=headers, content=payload)
+    response.raise_for_status()  # Raises HTTPStatusError for bad responses (4xx and 5xx)
     print(response.text)
-except requests.exceptions.HTTPError as http_err:
+except httpx.HTTPStatusError as http_err:
     print(f"HTTP error occurred: {http_err}")  # Python 3.6
     print(f"Response status code: {response.status_code}")
     print(f"Response body: {response.text}")
 except Exception as err:
     print(f"Other error occurred: {err}")  # Python 3.6
+
