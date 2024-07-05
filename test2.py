@@ -6,5 +6,5 @@ import streamlit as st
 # st.write(response_code)
 # st.write(response_header)
 title=scrap.scrape_all_fsns(['ACCGZRZ2SSCF6Y4Y'])
-# print(title)
+print(title)
 st.write(title)
