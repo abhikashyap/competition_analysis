@@ -35,15 +35,39 @@ with st.container():
 
             overall_progress.progress((i + 1) / len(list_of_keywords), text=f"{progress_text} ({i + 1}/{len(list_of_keywords)})")
             st.session_state['all_fsns'] = all_fsns
-            driver=sc.open_chrome_headless()
-            fsns=sc.fns_scrap(driver,url,1)
-            driver.quit()
-            all_fsns.extend(fsns)
-        overall_progress.progress(1.0, text="Scraping complete!")
+        #     driver=sc.open_chrome_headless()
+        #     fsns=sc.fns_scrap(driver,url,1)
+        #     driver.quit()
+        #     all_fsns.extend(fsns)
+        # overall_progress.progress(1.0, text="Scraping complete!")
     else:
         st.write("Enter Keywords")
     
-
+final_fsn_list=['ACCG6DS7WDJHGWSH',
+ 'ACCGVWSB2YBKFSQD',
+ 'ACCEMZ7HPZUZHFPM',
+ 'ACCFKYE2ARGG67WC',
+ 'ACCEVQZABYWJHRHF',
+ 'ACCFAMFQGCNEB8HM',
+ 'ACCHFBBWTTYWKW5F',
+ 'ACCGZEGCF4Z7CZ9E',
+ 'ACCFHBK3GUQE3BUD',
+ 'ACCFAMFQSGUG9D8R',
+ 'ACCGP2HJA3HKHTF4',
+ 'ACCGWU2ABQ3EAUM8',
+ 'ACCG48YRGAHFEV3P',
+ 'ACCHFZGFAZRFQZKC',
+ 'ACCGTCYRNADXCXNG',
+ 'ACCGC4GN5SQR7ZCZ',
+ 'ACCGDSSU8BNHKN8G',
+ 'ACCG2FUZEKMMVZ7N',
+ 'ACCHFBCFK8RFXRKH',
+ 'ACCGZN9AG6YP38EG',
+ 'ACCGMG43HFWFFSUE',
+ 'ACCHYVEQHZZ35PJ7',
+ 'ACCGZRZ2SSCF6Y4Y',
+ 'ACCGPQY5URHHYHSW']
+all_fsns=final_fsn_list
 st.write(f"Total no of product id collected is {len(all_fsns)}")
 if len(all_fsns) > 0:
     final_fsn_list = list(set(all_fsns))
