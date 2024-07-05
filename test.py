@@ -113,6 +113,41 @@ def final_selling_price(data):
     except:
         pass
     return final_selling_price
+
+def all_specs(data):
+    slots = data["RESPONSE"]["slots"]
+    for index in range(len(slots)):
+        try:
+            specifications = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponent"]["value"]["specification"]
+            break
+        except:
+            pass
+    specification_dict = {}
+    for each_dict in specifications:
+        values = list(each_dict.values())
+        specification_dict[values[0]] = values[-1][0]
+    return specification_dict
+def all_specifications(data):
+    slots = data["RESPONSE"]["slots"]
+    for index in range(len(slots)):
+        key_dict = {}
+        try:
+            renderable_components = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"]
+            for component in range(len(renderable_components)):
+                specification_dict = {}
+                specifications = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"][component]["value"]["attributes"]
+                for each_dict in specifications:
+                    values = list(each_dict.values())
+                    specification_dict[values[0]] = values[-1][0]
+                key = data["RESPONSE"]["slots"][index]["widget"]["data"]["renderableComponents"][component]["value"]["key"]
+                key_dict[key] = specification_dict
+            k = {}
+            for key, value in key_dict.items():
+                k.update(value)
+            break
+        except:
+            pass
+    return k
 def title_scrap(FSN):
     data=scrap(FSN)
     title_text=final_selling_price(data)
