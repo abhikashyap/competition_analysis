@@ -574,7 +574,7 @@ def scrape_all_fsns(fsns, max_retries=3):
     #     data=make_a_request(fsn)
     #     print(fsn,data)
     #     scraped_data.append(data)
-    max_concurrent_requests = 1
+    max_concurrent_requests = 10
 
     # Create a ThreadPoolExecutor to parallelize the scraping
     with concurrent.futures.ThreadPoolExecutor(max_concurrent_requests) as executor:
