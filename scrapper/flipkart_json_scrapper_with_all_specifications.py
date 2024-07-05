@@ -16,6 +16,7 @@ def collecting_Flipkart_Data(FSN):
 
 
     url = "https://1.rome.api.flipkart.com/api/4/page/fetch"
+    print(FSN)
 
     payload = json.dumps({
         "pageUri": f"/a/p/a?pid={FSN}",
