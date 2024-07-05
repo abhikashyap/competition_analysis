@@ -76,3 +76,8 @@ try:
     print(f"Response headers: {response.headers}")
     print(f"Response body: {response.text}")
 except httpx.HTTPStatusError as http_err:
+    print(f"HTTP error occurred: {http_err}")  # Python 3.6
+    print(f"Response status code: {response.status_code}")
+    print(f"Response body: {response.text}")
+except Exception as err:
+    print(f"Other error occurred: {err}")  # Python 3.6
