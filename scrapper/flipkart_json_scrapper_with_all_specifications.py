@@ -16,7 +16,6 @@ def collecting_Flipkart_Data(FSN):
 
 
     url = "https://1.rome.api.flipkart.com/api/4/page/fetch"
-    print(FSN)
 
     payload = json.dumps({
         "pageUri": f"/a/p/a?pid={FSN}",
@@ -138,7 +137,6 @@ def title(data):
             title = data['RESPONSE']['pageData']['pageContext']['seo']['title']
     except:
         pass
-    print(title)
     return title
 
 
@@ -156,7 +154,7 @@ def rating(data):
                                     if 'rating' in data['RESPONSE']['pageData']['pageContext']['fdpEventTracking']['events']['psi']['pr']:
                                         rating = data['RESPONSE']['pageData']['pageContext'][
                                             'fdpEventTracking']['events']['psi']['pr']['rating']
-        print(rating)
+
     except:
         pass
     return rating
@@ -365,7 +363,6 @@ def colours(data):
                                 value = swatchComponent['value']
                                 if 'attributeOptions' in value:
                                     attributeOptions = value['attributeOptions']
-                                    print(attributeOptions)
                                     color_count = len(attributeOptions[0])
                                     
     except:
@@ -578,7 +575,7 @@ def scrape_all_fsns(fsns, max_retries=3):
     #     data=make_a_request(fsn)
     #     print(fsn,data)
     #     scraped_data.append(data)
-    max_concurrent_requests = 1
+    max_concurrent_requests = 50
 
     # Create a ThreadPoolExecutor to parallelize the scraping
     with concurrent.futures.ThreadPoolExecutor(max_concurrent_requests) as executor:
