@@ -15,7 +15,7 @@ bs4
 httpx
 fuzzywuzzy
 selectolax
-
+streamlit_plotly_events
 
 # graph resgression brand name and product detail
 # price range

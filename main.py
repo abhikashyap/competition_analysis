@@ -160,21 +160,44 @@ if len(all_fsns) > 0:
     with st.container():
         price_col1,price_col2=st.columns(2)
         with price_col1:
-            price_hist=px.histogram(final_scrapped_data, x='final_selling_price', nbins=10,height=1000,width=1000, title='Distribution of Final Selling Prices')
+            price_hist=px.histogram(final_scrapped_data, x='final_selling_price', nbins=10,height=800,width=1000, title='Distribution of Final Selling Prices')
             st.plotly_chart(price_hist)
 
-        price_vs_ratings=final_scrapped_data.groupby('final_selling_price').agg({'ratings_count':'sum'})
+        price_vs_ratings=final_scrapped_data.groupby('final_selling_price').agg({'ratings_count':'sum','brand':list,'fsn':list})
         price_vs_ratings.reset_index(inplace=True)
+        price_vs_ratings['brand']=price_vs_ratings['brand'].apply(lambda x: "   ".join(list(set(x))))
+        price_vs_ratings['fsn_count']=price_vs_ratings['fsn'].apply(lambda x:len(x))
         with price_col2:
-            rating_hist=px.scatter(price_vs_ratings, x='final_selling_price', y='ratings_count', 
-                            title='Scatter Plot of Final Selling Price vs Ratings Count',
-                            labels={'final_selling_price': 'Final Selling Price', 'ratings_count': 'Ratings Count'},
-                            trendline="ols")
+            rating_hist = px.scatter(
+                price_vs_ratings,
+                x='final_selling_price',
+                y='ratings_count',
+                title='Scatter Plot of Final Selling Price vs Ratings Count',
+                labels={'final_selling_price': 'Final Selling Price', 'ratings_count': 'Ratings Count', 'Brands': 'brand', 'Fsn_count': 'fsn_count'},
+                hover_data={'brand': True, 'fsn_count': True},
+                trendline="ols"
+                                )
+
+            # Customize hover template with larger font size
+            rating_hist.update_traces(
+                hovertemplate="<span style='font-size:16px'><b>Final Selling Price: %{x}</b><br>"
+                            "<b>Ratings Count: %{y}</b><br>"
+                            "<b>Brand: %{customdata[0]}</b><br>"
+                            "<b>FSNs: %{customdata[1]}</b><br></span>",
+                customdata=price_vs_ratings[['brand', 'fsn_count']]
+                                    )
+
+            
 
             st.plotly_chart(rating_hist)
-            list_of_price=st.text_input("Enter list of price ",value=int(price_vs_ratings['final_selling_price'].values[0]))
-            list_of_price=[int(i) for i in list_of_price.split(',')]
-            brand_info=final_scrapped_data[final_scrapped_data['final_selling_price'].isin(list_of_price)]
+            # list_of_price=st.text_input("Enter list of price ",value=int(price_vs_ratings['final_selling_price'].values[0]))
+            # list_of_price=[int(i) for i in list_of_price.split(',')]
+            pricing_col1,pricing_col2=st.columns(2)
+            with pricing_col1:
+                lower_range=st.number_input(label="Enter lower range",value=10)
+            with pricing_col2:
+                higher_range=st.number_input(label="Enter lower range",value=1000)
+            brand_info=final_scrapped_data[(final_scrapped_data['final_selling_price']>=lower_range) & (final_scrapped_data['final_selling_price']<=higher_range)]
             brand_info=brand_info.groupby('brand').agg({"brand":"count"}).rename({"brand":"count_of_products"},axis=1)
             brand_info.reset_index(inplace=True)
             brand_presence_with_count_of_fsn=px.pie(brand_info, values='count_of_products', names='brand')
@@ -183,10 +206,13 @@ if len(all_fsns) > 0:
 
     rating_df=final_scrapped_data.groupby('brand').agg({"ratings_count":"sum"})
     rating_df.reset_index(inplace=True)
+    brand_fitered=list(set(rating_df['brand'].to_list()))
     all_discription_filter=list(set(filtered_important_features).difference(set(competitor_data.columns.tolist())))
-    list_of_brand=st.text_input("Enter list of brands ",value='boAt')
-    list_of_brand=[str(i) for i in list_of_brand.split(',')]
-    features_to_analyze=final_scrapped_data[final_scrapped_data['brand'].isin(list_of_brand) & final_scrapped_data['final_selling_price'].isin(list_of_price)]
+    selected_brand=st.multiselect("enter brand names",brand_fitered)
+    
+    # list_of_brand=st.text_input("Enter list of brands ",value='boAt')
+    # list_of_brand=[str(i) for i in list_of_brand.split(',')]
+    features_to_analyze=final_scrapped_data[final_scrapped_data['brand'].isin(selected_brand) & (final_scrapped_data['final_selling_price']>=lower_range) & (final_scrapped_data['final_selling_price']<=higher_range)]
     all_discription_filter.extend(['brand','fsn'])
 
     feature_df=features_to_analyze[all_discription_filter]
