@@ -14,8 +14,10 @@ import numpy as np
 def open_chrome_headless():
     options = Options()
     options.add_argument("--headless")
-    # driver = webdriver.Chrome(options=options)
-    driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",options=options)
+    try:
+        driver = webdriver.Chrome(options=options)
+    except:
+        driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",options=options)
     return driver
 
 

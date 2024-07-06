@@ -138,7 +138,8 @@ if len(all_fsns) > 0:
         Brand_dominance.loc[Brand_dominance['count']<int(filter_out_less_product_count),'Brand_type'] = 'others'
         Brand_dominance['Brand_type'].fillna(Brand_dominance['brand'],inplace=True)
         Brand_dominance.groupby('Brand_type')['count'].sum()
-        Brand_dominance_fig=px.pie(Brand_dominance, values='count', names='Brand_type', title=f'''Brand Dominance in price range {lower_price} to {higher_price} with count of product > {filter_out_less_product_count}''',height=800,width=1200)
+        Brand_dominance_fig=px.pie(Brand_dominance, values='count', names='Brand_type', title=f'''Brand Dominance in price range {lower_price} to {higher_price} with count of product > {filter_out_less_product_count}''',height=800,width=1200
+                                   ,template='presentation')
         st.plotly_chart(Brand_dominance_fig)
     with dominance_col2:
         with st.expander("See details of count of product"):
@@ -152,7 +153,7 @@ if len(all_fsns) > 0:
         rating_df.reset_index(inplace=True)
         rating_df=rating_df.sort_values(by='ratings_count',ascending=False).head(20)
         # rating_pie=px.bar(rating_df, y='ratings_count', x='brand',height=800,width=1200)
-        rating_pie=px.pie(rating_df, values='ratings_count', names='brand',custom_data=['fsn'],height=600,width=1000)
+        rating_pie=px.pie(rating_df, values='ratings_count', names='brand',custom_data=['fsn'],height=600,width=1000,template='presentation')
         rating_pie.update_traces(
         hovertemplate='<b>%{label}</b><br>Ratings Count: %{value}<br>FSN: %{customdata[0]}<extra></extra>'
         )
@@ -160,7 +161,9 @@ if len(all_fsns) > 0:
     with st.container():
         price_col1,price_col2=st.columns(2)
         with price_col1:
-            price_hist=px.histogram(final_scrapped_data, x='final_selling_price', nbins=10,height=800,width=1000, title='Distribution of Final Selling Prices')
+            price_hist=px.histogram(final_scrapped_data, x='final_selling_price', nbins=10,height=800,width=1000, title='Distribution of Final Selling Prices',color='brand'
+             ,template='presentation')
+
             st.plotly_chart(price_hist)
 
         price_vs_ratings=final_scrapped_data.groupby('final_selling_price').agg({'ratings_count':'sum','brand':list,'fsn':list})
@@ -170,12 +173,15 @@ if len(all_fsns) > 0:
         with price_col2:
             rating_hist = px.scatter(
                 price_vs_ratings,
-                x='final_selling_price',
-                y='ratings_count',
-                title='Scatter Plot of Final Selling Price vs Ratings Count',
-                labels={'final_selling_price': 'Final Selling Price', 'ratings_count': 'Ratings Count', 'Brands': 'brand', 'Fsn_count': 'fsn_count'},
-                hover_data={'brand': True, 'fsn_count': True},
-                trendline="ols"
+                    x='final_selling_price',
+                    y='ratings_count',
+                    title='Scatter Plot of Final Selling Price vs Ratings Count',
+                    labels={'final_selling_price': 'Final Selling Price', 'ratings_count': 'Ratings Count'},
+                    hover_data={'brand': True, 'fsn_count': True},
+                    trendline="ols",
+                    size='fsn_count',  # Use the 'fsn_count' column to determine the size of the markers
+                    width=800,  # Set the width of the plot
+                    height=600  # Set the height of the plot
                                 )
 
             # Customize hover template with larger font size
@@ -200,7 +206,7 @@ if len(all_fsns) > 0:
             brand_info=final_scrapped_data[(final_scrapped_data['final_selling_price']>=lower_range) & (final_scrapped_data['final_selling_price']<=higher_range)]
             brand_info=brand_info.groupby('brand').agg({"brand":"count"}).rename({"brand":"count_of_products"},axis=1)
             brand_info.reset_index(inplace=True)
-            brand_presence_with_count_of_fsn=px.pie(brand_info, values='count_of_products', names='brand')
+            brand_presence_with_count_of_fsn=px.pie(brand_info, values='count_of_products', names='brand',template='presentation')
             st.plotly_chart(brand_presence_with_count_of_fsn)
 
 
@@ -208,18 +214,21 @@ if len(all_fsns) > 0:
     rating_df.reset_index(inplace=True)
     brand_fitered=list(set(rating_df['brand'].to_list()))
     all_discription_filter=list(set(filtered_important_features).difference(set(competitor_data.columns.tolist())))
-    selected_brand=st.multiselect("enter brand names",brand_fitered)
+    filter_col1,filter_col2=st.columns(2)
+    with filter_col1:
+        selected_brand=st.multiselect("enter brand names",brand_fitered)
     
     # list_of_brand=st.text_input("Enter list of brands ",value='boAt')
     # list_of_brand=[str(i) for i in list_of_brand.split(',')]
     features_to_analyze=final_scrapped_data[final_scrapped_data['brand'].isin(selected_brand) & (final_scrapped_data['final_selling_price']>=lower_range) & (final_scrapped_data['final_selling_price']<=higher_range)]
-    all_discription_filter.extend(['brand','fsn'])
+    all_discription_filter.extend(['brand','fsn','image_link'])
 
     feature_df=features_to_analyze[all_discription_filter]
 
     features_after_not_unique=[description for description in feature_df if feature_df[description].nunique()>0]
-    feature_df
-    for fe in features_after_not_unique:
+    with filter_col2:
+        features_after_not_unique_filtered=st.multiselect("Enter Features for comparison",features_after_not_unique)
+    for fe in features_after_not_unique_filtered:
         if (fe not in ['brand', 'fsn']) and ('warranty' not in fe.lower()):
             feature_col1,feature_col2=st.columns(2)
             
@@ -227,45 +236,57 @@ if len(all_fsns) > 0:
                 st.markdown(f"##### Comparison for {fe}")
             
                 feature_df_temp=feature_df[features_after_not_unique]
-                feature_df_temp_grouped=feature_df_temp.groupby(['brand',fe]).agg({"fsn":["count",list]})
+                feature_df_temp_grouped=feature_df_temp.groupby(['brand',fe]).agg({"fsn":["count",list],"image_link":list})
                 feature_df_temp_grouped.reset_index(inplace=True)
                 feature_df_temp_grouped.columns=[" ".join(i) for i in feature_df_temp_grouped.columns]
-                    
-                st.dataframe(feature_df_temp_grouped)
+                feature_df_temp_grouped['image_link'] = feature_df_temp_grouped['image_link list'].apply(lambda x: x[0])    
+                st.dataframe(feature_df_temp_grouped, column_config={
+                        "image_link": st.column_config.ImageColumn(
+                            "Images" # Column title
+                        )
+                    })
+
             with feature_col2:
             
                 fe_distribution=pd.DataFrame(final_scrapped_data[fe].value_counts())
                 fe_distribution.reset_index(inplace=True)
                 fe_distribution_pie=fe_distribution.sort_values(by='count',ascending=False).head(10)
-                fe_fig=px.pie(fe_distribution_pie,values='count',names=fe,title=f'Feature Importance Of {fe} in market')
+                fe_fig=px.pie(fe_distribution_pie,values='count',names=fe,title=f'Feature Importance Of {fe} in market'
+                              ,template='presentation')
                 st.plotly_chart(fe_fig)
-        # st.write(feature_df_temp_grouped)
-    # # #option
-    # options_to_select = []
-    # for column in filtered_important_features:
-    #     if column not in competitor_data.columns.to_list():
-    #         options_to_select.append(column)
-    # option = st.selectbox(
-    #     "Select Feature",
-    #     tuple(options_to_select))
+            with st.expander(label='Click for all feture comaprison'):    
+                def join_fsn_list(fsn_list):
+                    return ', '.join(fsn_list)
+                updated_fsn_lists = []
 
-    # feature=final_scrapped_data.copy()
-    # col1,col2=st.columns(2)
-    # color=feature.groupby(['brand',option]).agg({"fsn":'count'}).rename({'fsn':"count_of_products"},axis=1)
-    # color.reset_index(inplace=True)
-    # color=color.sort_values(by='count_of_products',ascending=False)
-    # top_to_color=color.head(10)
+                for i, row in feature_df_temp_grouped.iterrows():
+                    updated_fsn_lists.extend(row['fsn list'])
 
-    # fig = px.sunburst(top_to_color, values='count_of_products', path=['brand', option], title=f'Feature Importance Of {option}',height=800,width=1200)
-    # st.dataframe(color)
-    # with col1:
-    #     st.plotly_chart(fig, use_container_width=False)
-    # with col2:
-    #     color_overall=feature.groupby([option]).agg({"fsn":'count'}).rename({'fsn':"count_of_products"},axis=1)
-    #     color_overall.reset_index(inplace=True)
-    #     color_overall=color_overall.sort_values(by='count_of_products',ascending=False)
-    #     top_to_color_overall=color_overall.head(10)
-    #     pie= px.pie(top_to_color_overall, values='count_of_products', names=option, title=f'Feature Importance Of {option} in market',height=800,width=1200)
-    #     st.plotly_chart(pie)
-        
+                final_fsn = final_scrapped_data[final_scrapped_data['fsn'].isin(updated_fsn_lists)]
+                final_fsn1 = final_fsn.dropna(how='all', axis=1)
+                final_fsn1=final_fsn1.set_index('fsn')
+
+                final_fsn2 = final_fsn1.transpose()
+
+                if 'image_link' in final_fsn2.index:
+                    img_row = final_fsn2.loc['image_link']
+                    final_fsn2 = final_fsn2.drop('image_link')
+                    final_fsn2 = pd.concat([img_row.to_frame().T, final_fsn2])
+
+                # # Add brand name above each column
+                # if 'brand' in final_fsn.columns:
+                #     brand_names = final_fsn.set_index('fsn')['brand']
+                #     final_fsn2.columns = [f"{brand_names.get(fsn, '')}<br>{fsn}" for fsn in final_fsn2.columns]
+
+                # Render image links correctly in the DataFrame
+                def render_image_link(link):
+                    return f'<a href="{link}" target="_blank"><img src="{link}" width="100"></a>'
+
+                # Apply the render_image_link function to each cell of the DataFrame
+                final_fsn2_html = final_fsn2.map(lambda x: render_image_link(x) if isinstance(x, str) and x.startswith('http') else x)
+
+                # Convert the DataFrame to HTML without the column index
+                final_fsn2_html_str = final_fsn2_html.to_html(escape=False)
+
+                st.markdown(final_fsn2_html_str, unsafe_allow_html=True)
 
