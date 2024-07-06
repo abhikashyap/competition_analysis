@@ -266,8 +266,9 @@ if len(all_fsns) > 0:
                 final_fsn1 = final_fsn.dropna(how='all', axis=1)
                 final_fsn1=final_fsn1.set_index('fsn')
 
-                final_fsn2 = final_fsn1.transpose()
 
+                final_fsn2 = final_fsn1.transpose()
+            
                 if 'image_link' in final_fsn2.index:
                     img_row = final_fsn2.loc['image_link']
                     final_fsn2 = final_fsn2.drop('image_link')
