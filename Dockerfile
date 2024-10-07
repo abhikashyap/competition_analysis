@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 #     apt-get clean 
     # && prefect cloud login --key pnu_vTVrNhdHEyxnfayjPLPSLclziDZImW2kA97W --workspace blooprint/default
 # RUN ["prefect" "cloud" "login" "-k" "pnu_vTVrNhdHEyxnfayjPLPSLclziDZImW2kA97W"]
-CMD [ "streamlit", "run", "test2.py"]
+CMD [ "streamlit", "run", "main.py"]

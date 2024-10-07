@@ -38,7 +38,7 @@ with st.container():
             for i, keyword in enumerate(list_of_keywords):
                 search_queries = [keyword]
                 start_page = 1
-                end_page = 5  # Adjust the number of pages as needed
+                end_page = 25  # Adjust the number of pages as needed
 
                 # Collect FSNs
                 all_data = collect_all_data_ids(search_queries, start_page, end_page)
@@ -46,7 +46,7 @@ with st.container():
 
                 # Create DataFrame
                 df = pd.DataFrame(all_data, columns=['search_query', 'position', 'page_no', 'data_id'])
-                st.write(df)
+
 
                 # Get unique FSNs and update session state
                 new_fsns = list(set(df['data_id'].tolist()))
