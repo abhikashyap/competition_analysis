@@ -15,33 +15,33 @@ from selenium.webdriver.chrome.options import Options
 def collecting_Flipkart_Data(FSN):
 
 
-    url = "https://1.rome.api.flipkart.com/api/4/page/fetch"
+    url = "https://2.rome.api.flipkart.com/api/4/page/fetch?cacheFirst=false"
 
-    payload = json.dumps({
-        "pageUri": f"/a/p/a?pid={FSN}",
-        "locationContext": {
-            "pincode": "560066"
-        },
-        "isReloadRequest": True
-    })
-
+    payload = json.dumps(
+        {
+            "pageUri": f"/a/p/a?pid={FSN}",
+            "locationContext": {"pincode": "560066", "changed": False},
+            "isReloadRequest": True,
+        }
+    )
     headers = {
-        'Accept': '*/*',
-        'Accept-Language': 'en-US,en;q=0.9,en-IN;q=0.8',
-        'Connection': 'keep-alive',
-        'Content-Type': 'application/json',
-        'Cookie': 'T=clpxn4xzy06470wd2ztjy5pj8-BR1702101250078; dpr=1; _pxvid=60779be7-9657-11ee-af89-338edb3a8d5b; vh=752; vw=1530; _gcl_au=1.1.1079217834.1702903922; _gid=GA1.2.6600805.1705499941; mp_9ea3bc9a23c575907407cf80efd56524_mixpanel=%7B%22distinct_id%22%3A%20%22ACC9644F91FB39448188106BA68C24709F8D%22%2C%22%24device_id%22%3A%20%2218d17b7d4db777-06bb98bdf4808a-17462c6f-15f900-18d17b7d4dc131c%22%2C%22%24initial_referrer%22%3A%20%22%24direct%22%2C%22%24initial_referring_domain%22%3A%20%22%24direct%22%2C%22%24user_id%22%3A%20%22ACC9644F91FB39448188106BA68C24709F8D%22%7D; AMCVS_55CFEDA0570C3FA17F000101%40AdobeOrg=1; AMCV_55CFEDA0570C3FA17F000101%40AdobeOrg=-227196251%7CMCIDTS%7C19740%7CMCMID%7C36873895514639056584390477893388312916%7CMCAAMLH-1706104756%7C12%7CMCAAMB-1706104756%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1705507156s%7CNONE%7CMCAID%7CNONE; _ga=GA1.2.1489252585.1702903922; _ga_TVF0VCMCT3=GS1.1.1705499940.6.1.1705499956.44.0.0; moe_uuid=990b4aa9-f52e-4592-9703-947b29f8da91; s_nr=1705500035468-Repeat; _ga_0SJLGHBL81=GS1.1.1705499940.6.1.1705500035.0.0.0; Network-Type=4g; AMCVS_17EB401053DAF4840A490D4C%40AdobeOrg=1; AMCV_17EB401053DAF4840A490D4C%40AdobeOrg=-227196251%7CMCIDTS%7C19741%7CMCMID%7C43990386728713327323661047710453072722%7CMCAAMLH-1706176097%7C12%7CMCAAMB-1706176097%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1705578497s%7CNONE%7CMCAID%7CNONE; pxcts=b4dffb16-b5e6-11ee-a796-bd365d618683; gpv_pn=HomePage; gpv_pn_t=FLIPKART%3AHomePage; S=d1t13P0sadT9JJUk/JQw/P1AiP7GEZg72uHn1BywMA2YYqzym/ipIjlSKvGXCMl2+ODGqUk3V1EktVIchHi3l8HcUow==; SN=VI8048300B964C487589C255C8EEDFE61D.TOK8534926BDA00472D8AF6CFA1D9EFC397.1705571443.LO; _px3=dc9ad67f3ac3f8530015aa57bcf00ca8ad654686b055df2e62665772dd21c810:N2lC4bvOxP1U39ED7T1OG83imRzCF61gigkr3yAb9cq3PcTni0XzA3GIARmuZ3dL1wz5EeyBWxO5wcRGa+bWyA==:1000:urP/XRgIzylJ912q+GaBtEKufjbtpLRXGUGJ36h49BjraJTL9mbOir+AkO/DH2hy6s5fO97Wg0d9HNLgIXdZPmP79isB+gBjpuFMST5isimWGxNPlQ59JyTbAn3W17gTH24Z3q+p/Hh7mYLMDQLn2507T8KbNLOwU9M6LwuS9S4GIk30DhaYVrrw5G/edMaT3+Uy5pagpr+6aH2n61rEpo7h4Kg+XYkVsG55qtNyxU4=; s_sq=flipkart-prd%3D%2526pid%253Dwww.flipkart.com%25253Abraun-face-mini-hair-remover-fs1000-cordless-epilator-women%25253Ap%25253Aitm3b6779c5ca9be%2526pidt%253D1%2526oid%253DfunctionSr%252528%252529%25257B%25257D%2526oidt%253D2%2526ot%253DLI%26flipkartsellerprod%3D%2526c.%2526a.%2526activitymap.%2526page%253Dhttps%25253A%25252F%25252Fseller.flipkart.com%25252Findex.html%252523dashboard%25252Flistings-management%25253FlistingState%25253DACTIVE%2526link%253DDownload%2526region%253Dbulk-file-history%2526.activitymap%2526.a%2526.c%2526pid%253Dhttps%25253A%25252F%25252Fseller.flipkart.com%25252Findex.html%252523dashboard%25252Flistings-management%25253FlistingState%25253DACTIVE%2526oid%253Dhttps%25253A%25252F%25252Fseller.flipkart.com%25252Fnapi%25252Flisting%25252FstockFileDownload%25253FsellerId%25253D948d1f55eead4eaa%252526fileId%25253D%2525252Fopera%2526ot%253DA',
-        'Origin': 'https://www.flipkart.com',
-        'Referer': 'https://www.flipkart.com/',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-site',
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'X-User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 FKUA/website/42/website/Desktop',
-        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Brave";v="126"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Linux"'
+        "Accept": "/",
+        "Accept-Language": "en-US,en;q=0.9,en-IN;q=0.8",
+        "Connection": "keep-alive",
+        "Content-Type": "application/json",
+        "Cookie": "T=SD.01413867-173a-4fae-95a2-487e0b222201.1720765219022; _gcl_au=1.1.241064431.1721043894; K-ACTION=null; ud=0.hkKPNCskmOqJ1xJY2vdTnlKDrZ3JWsJFBmvfjdvWTnkzmg4QjOam2KSglsLFWNf1KnwvnnGmbTn5qR_P0CrQifW7tC7k1Qs_5pRd9pmRk_AU3nI7GdAPLAp3q4CuLUl-U5KXy8tyjKS4eVyLqS6ryw; rt=null; at=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ2Yjk5NDViLWZmYTEtNGQ5ZC1iZDQyLTFkN2RmZTU4ZGNmYSJ9.eyJleHAiOjE3MjcwODYyOTEsImlhdCI6MTcyNTM1ODI5MSwiaXNzIjoia2V2bGFyIiwianRpIjoiODE5OTgxNWYtZTExOC00ZmYzLTllM2ItNjNiYWFhMjNjZjk5IiwidHlwZSI6IkFUIiwiZElkIjoiU0QuMDE0MTM4NjctMTczYS00ZmFlLTk1YTItNDg3ZTBiMjIyMjAxLjE3MjA3NjUyMTkwMjIiLCJrZXZJZCI6IlZJQzMwNzhBMTQ2RkIzNDRGNzg0Njg5QThFRDBGN0ZGODIiLCJ0SWQiOiJtYXBpIiwidnMiOiJMTyIsInoiOiJIWUQiLCJtIjp0cnVlLCJnZW4iOjR9.6NWcnliyysBhGDYGn35AmYCXQDDWNzRiSqCoCf0-xvs; dpr=2; vh=1154; vw=845; mp_9ea3bc9a23c575907407cf80efd56524_mixpanel=%7B%22distinct_id%22%3A%20%22ACC9644F91FB39448188106BA68C24709F8D%22%2C%22%24device_id%22%3A%20%22190bb31281dc7-0fe33fe536808d-13462c6f-1fa400-190bb31281e792%22%2C%22%24initial_referrer%22%3A%20%22%24direct%22%2C%22%24initial_referring_domain%22%3A%20%22%24direct%22%2C%22%24user_id%22%3A%20%22ACC9644F91FB39448188106BA68C24709F8D%22%7D; AMCV_55CFEDA0570C3FA17F000101%40AdobeOrg=-227196251%7CMCIDTS%7C19971%7CMCMID%7C49695860128186936860467885203296944593%7CMCAAMLH-1725876760%7C12%7CMCAAMB-1726034667%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1725437067s%7CNONE%7CMCAID%7CNONE; s_nr=1725429867737-Repeat; _ga=GA1.2.416966210.1721043894; _ga_0SJLGHBL81=GS1.1.1725429868.12.0.1725429872.0.0.0; _ga_TVF0VCMCT3=GS1.1.1725429868.12.0.1725429872.56.0.0; vd=VIC3078A146FB344F784689A8ED0F7FF82-1722337920890-14.1725685645.1725685645.158267360; AMCVS_17EB401053DAF4840A490D4C%40AdobeOrg=1; AMCV_17EB401053DAF4840A490D4C%40AdobeOrg=-227196251%7CMCIDTS%7C19974%7CMCMID%7C90415841401313078532311899783159803546%7CMCAAMLH-1725963092%7C12%7CMCAAMB-1726290450%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1725692850s%7CNONE%7CMCAID%7CNONE; SN=VIC3078A146FB344F784689A8ED0F7FF82.TOKE66238FAE7564E75A5B70F79C8FD4874.1725685652.LO; S=d1t12TAY/HgE/MiZvPz8GfD4/P2YVIynPL1QvqgFPvvQTvEMrrbnHPyZkelRA3OYtmEnu2dwCEnroXgW/6ADducYZUg==; s_sq=flipkart-prd%3D%2526pid%253Dwww.flipkart.com%25253Adell-kb-216-wired-usb-desktop-keyboard%25253Ap%25253Aitmehdyaydrcbgav%2526pidt%253D1%2526oid%253DfunctionJr%252528%252529%25257B%25257D%2526oidt%253D2%2526ot%253DSPAN; K-ACTION=null; S=d1t12PyE/GT8/Pz8/SFc/eT9wemRlOTVs7rIjuHPnqy7s8M8uaFgFgo1rA1VQb++AozhlxZ535A6tMyYM/I9ZIPopWw==; SN=VIC3078A146FB344F784689A8ED0F7FF82.TOKE66238FAE7564E75A5B70F79C8FD4874.1722520922.LO; T=SD.01413867-173a-4fae-95a2-487e0b222201.1720765219022; at=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFkOTYzYzUwLTM0YjctNDA1OC1iMTNmLWY2NDhiODFjYTBkYSJ9.eyJleHAiOjE3MjQwNjU5MTcsImlhdCI6MTcyMjMzNzkxNywiaXNzIjoia2V2bGFyIiwianRpIjoiNTRhYTYzZTYtN2UwYS00NzNjLTlmZWMtMTRlNWE3MzNiOTM1IiwidHlwZSI6IkFUIiwiZElkIjoiU0QuMDE0MTM4NjctMTczYS00ZmFlLTk1YTItNDg3ZTBiMjIyMjAxLjE3MjA3NjUyMTkwMjIiLCJrZXZJZCI6IlZJQzMwNzhBMTQ2RkIzNDRGNzg0Njg5QThFRDBGN0ZGODIiLCJ0SWQiOiJtYXBpIiwidnMiOiJMTyIsInoiOiJIWUQiLCJtIjp0cnVlLCJnZW4iOjR9.rzkATbMpJz4PBtiDNnM9lf4l6GmY-LuIpMQG_wgM6Yo; rt=null; vd=VIC3078A146FB344F784689A8ED0F7FF82-1722337920890-4.1722521100.1722520703.153700142",
+        "Origin": "https://www.flipkart.com",
+        "Referer": "https://www.flipkart.com/",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
+        "X-User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36 FKUA/website/42/website/Desktop",
+        "sec-ch-ua": '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+        "sec-ch-ua-mobile": "?1",
+        "sec-ch-ua-platform": '"Android"',
     }
+
 
     try:
         response = httpx.post(url, headers=headers, content=payload)
