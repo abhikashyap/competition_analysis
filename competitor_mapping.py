@@ -11,9 +11,15 @@ from piTask import general
 import ast
 import re
 import numpy as np
+from fake_useragent import UserAgent
+
+# Create an instance of the UserAgent class
+ua = UserAgent()
+
 # Thread-local data to store per-thread HTTPSConnection
 thread_local = threading.local()
-output_sheet='1vBoQA3yxu6glukkFO5ohaYgQeIQ5X3TAVY-dm9BwM0o'
+output_sheet = '1AZVMYH_qgty_0IT8TtmsCZypWisTn4yOHdCM_JdghG8'
+
 def get_connection():
     if not hasattr(thread_local, 'conn'):
         thread_local.conn = http.client.HTTPSConnection("www.flipkart.com", timeout=10)
@@ -27,11 +33,26 @@ def get_fsn(search, page):
     query_string = urlencode(params)
     path = f"/search?{query_string}"
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/85.0.4183.102 Safari/537.36',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Connection': 'keep-alive',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'en-US,en;q=0.9,en-IN;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Connection': 'keep-alive',
+    'Cookie': 'T=TI171834590882700170348350689694114812841536586598665351035628902266; _pxvid=eb18d238-2a15-11ef-8332-14f84e743341; vw=1825; dpr=1; ULSN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjb29raWUiLCJhdWQiOiJmbGlwa2FydCIsImlzcyI6ImF1dGguZmxpcGthcnQuY29tIiwiY2xhaW1zIjp7ImdlbiI6IjIiLCJ1bmlxdWVJZCI6IlVVSTI0MDYyMDExNTY1MTc4NDNPSjZNUDgiLCJma0RldiI6bnVsbH0sImV4cCI6MTczNTM5NTI2MSwiaWF0IjoxNzE5NjE1MjYxLCJqdGkiOiI5ZDExMTY5Mi03Y2UzLTRhMWUtYTA1Yy00ODhhZmNjNGFlOTEifQ.zOExzRJ7a938XyR0l0YYDIJXAWZrdo-X_3CVzJ0Yllk; ud=2.u2YKt5hrZGXNxNErz_Q2VW8FPyxCcsau8k1QHbiRYvk1M2SDMWrqCY8MD3TmoSVYSxXjwN6aD6dCfcJOgYrZ0Kx92e6InzYfjmWi43c5YcrfEW4fi15IEDoyrFMOhg_J9hTN9FxdR8s8IDJK2MS6hYoh9u_GswCVpF86xnSr1IAIE3GYBd_LDvGSC_6jDIKSY5MeCZYhN6VFehjLF7U8vZif2wMdXsOIGeNpZhzEHK0IDd4YmBulQQSaH2OO-MRI; _fbp=fb.1.1723806825233.442773842490427820; s_nr=1723806878808-Repeat; AMCV_55CFEDA0570C3FA17F000101%40AdobeOrg=-227196251%7CMCIDTS%7C19962%7CMCMID%7C77060089323537194633849373282035801268%7CMCAAMLH-1724411625%7C12%7CMCAAMB-1724663150%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1723814025s%7CNONE%7CMCAID%7CNONE; mp_9ea3bc9a23c575907407cf80efd56524_mixpanel=%7B%22distinct_id%22%3A%20%22ACC9644F91FB39448188106BA68C24709F8D%22%2C%22%24device_id%22%3A%20%221904f6797d98b5-08cc87a0a28c2b-4c657b58-1fa400-1904f6797dcaa3%22%2C%22%24initial_referrer%22%3A%20%22%24direct%22%2C%22%24initial_referring_domain%22%3A%20%22%24direct%22%2C%22%24user_id%22%3A%20%22ACC9644F91FB39448188106BA68C24709F8D%22%7D; _ga_0SJLGHBL81=GS1.1.1724810832.8.0.1724810832.0.0.0; _ga_TVF0VCMCT3=GS1.1.1724810832.8.0.1724810832.60.0.0; _ga=GA1.2.10499125.1718980240; _ga_2P94RMW04V=GS1.2.1725448195.1.0.1725448195.0.0.0; vh=956; AMCV_17EB401053DAF4840A490D4C%40AdobeOrg=-227196251%7CMCIDTS%7C20006%7CMCMID%7C52021146135361344382423900263871368379%7CMCAAMLH-1728625898%7C3%7CMCAAMB-1729057779%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1728460179s%7CNONE%7CMCAID%7CNONE; _gcl_au=1.1.680070548.1728456988; K-ACTION=null; at=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNhNzdlZTgxLTRjNWYtNGU5Ni04ZmRlLWM3YWMyYjVlOTA1NSJ9.eyJleHAiOjE3Mjg0OTA3ODIsImlhdCI6MTcyODQ4ODk4MiwiaXNzIjoia2V2bGFyIiwianRpIjoiM2FlZmUyNTYtZDA0Mi00MzNkLWI5NGQtMDg3MTg2ZDAxZmUyIiwidHlwZSI6IkFUIiwiZElkIjoiVEkxNzE4MzQ1OTA4ODI3MDAxNzAzNDgzNTA2ODk2OTQxMTQ4MTI4NDE1MzY1ODY1OTg2NjUzNTEwMzU2Mjg5MDIyNjYiLCJiSWQiOiJXSERQT0YiLCJrZXZJZCI6IlZJRUI0Q0QxMTVDNUZFNDNGNEFGNDUyMDgzNTg2QzQ1RjMiLCJ0SWQiOiJtYXBpIiwiZWFJZCI6IlVSalBra2w5SmNqVUs0U3E5NlpkMWN4UWMybWduaHNXV2tWa3FxNFhPZXg2THJjcnBFTmRvdz09IiwidnMiOiJMSSIsInoiOiJDSCIsIm0iOnRydWUsImdlbiI6NH0.U0i-Lv3G0HKMjt9cQc90O_DaEXfORzMViDhmAA57Lgs; rt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjhlM2ZhMGE3LTJmZDMtNGNiMi05MWRjLTZlNTMxOGU1YTkxZiJ9.eyJleHAiOjE3NDQyMTM3ODIsImlhdCI6MTcyODQ4ODk4MiwiaXNzIjoia2V2bGFyIiwianRpIjoiZjhkYjk1NzQtMDkyNy00MTE4LTk1NjUtYTFlNDNkYzA2NTFhIiwidHlwZSI6IlJUIiwiZElkIjoiVEkxNzE4MzQ1OTA4ODI3MDAxNzAzNDgzNTA2ODk2OTQxMTQ4MTI4NDE1MzY1ODY1OTg2NjUzNTEwMzU2Mjg5MDIyNjYiLCJiSWQiOiJXSERQT0YiLCJrZXZJZCI6IlZJRUI0Q0QxMTVDNUZFNDNGNEFGNDUyMDgzNTg2QzQ1RjMiLCJ0SWQiOiJtYXBpIiwibSI6eyJ0eXBlIjoibiJ9LCJ2IjoiRVVaMFhPIn0.RnavdI1eoACinVlH0JYjSgLqPK5ms-qbtI5t_N6bVCk; vd=VIEB4CD115C5FE43F4AF452083586C45F3-1718864841660-60.1728488982.1728488982.159438843; Network-Type=4g; qH=418696e663e903e6; s_sq=flipkart-prd%3D%2526pid%253Dwww.flipkart.com%25253Asearch%2526pidt%253D1%2526oid%253Dhttps%25253A%25252F%25252Fwww.flipkart.com%25252F%2526ot%253DA; fonts-loaded=en_loaded; isH2EnabledBandwidth=true; h2NetworkBandwidth=9; gpv_pn=HomePage; gpv_pn_t=FLIPKART%3AHomePage; S=d1t10Nz8/Pz8pbD8/Pxo/fD8iWFuBy3O0csqf8iMaXX03mKhIzCKaDVTPJZQGnlIVodlGW5eg0Gtlbq1EU++yHoVQ/g==; SN=VIEB4CD115C5FE43F4AF452083586C45F3.TOKBA2590E72609430E8A8F39668EA3CEE4.1728488998999.LI',
+    'Referer': 'https://www.flipkart.com/search?q=bluetooth+earphone&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&p%5B%5D=facets.price_range.from%3D1000&p%5B%5D=facets.price_range.to%3D1500',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': ua.random,
+    'sec-ch-ua': '"Microsoft Edge";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+    'sec-ch-ua-arch': '"x86"',
+    'sec-ch-ua-full-version': '"129.0.2792.79"',
+    'sec-ch-ua-full-version-list': '"Microsoft Edge";v="129.0.2792.79", "Not=A?Brand";v="8.0.0.0", "Chromium";v="129.0.6668.90"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-model': '""',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-ch-ua-platform-version': '"15.0.0"'
     }
 
     try:
@@ -81,16 +102,14 @@ def collect_all_data_ids(search_queries, start_page, end_page):
             search, page = future_to_task[future]
             try:
                 data_list = future.result()
-
                 all_data.extend(data_list)
             except Exception as exc:
                 print(f"Search '{search}' Page {page} generated an exception: {exc}")
 
     return all_data
 
-
-search_term=general.read_sheet(output_sheet,"search",1)
-search_queries=search_term['search_term'].to_list()
+search_term = general.read_sheet(output_sheet, "search", 1)
+search_queries = search_term['search_term'].to_list()
 start_page = 1
 end_page = 25
 
@@ -99,21 +118,22 @@ print(f"Total data-id attributes found: {len(all_data)}")
 
 # Create DataFrame
 search_term_page = pd.DataFrame(all_data, columns=['search_query', 'position', 'page_no', 'data_id'])
-
-general.print_sheet(1,search_term_page,'search_output',output_sheet,1,1,1)
-
+general.add_sheet_name(output_sheet, 'search_output', 1)
+general.print_sheet(1, search_term_page, 'search_output', output_sheet, 1, 1, 1)
 
 all_fsns = search_term_page['data_id'].to_list()
 final_fsn_list = list(set(all_fsns))
-competitor_data=fk_scrapper.scrape_all_fsns(final_fsn_list)
+competitor_data = fk_scrapper.scrape_all_fsns(final_fsn_list)
 competitor_data['brand'] = competitor_data['title'].str.split(" ").str[0]
 
-self=general.read_sheet(output_sheet,sheet_name='self')
-self_fsn=self['fsn'].to_list()
-self_data=fk_scrapper.scrape_all_fsns(self_fsn)
-
+self = general.read_sheet(output_sheet, sheet_name='self')
+self_fsn = self['fsn'].to_list()
+self_data = fk_scrapper.scrape_all_fsns(self_fsn)
 
 def convert_to_all_columns(brand_level_data):
+    # Collect dictionaries for each row in the DataFrame
+    rows_to_expand = []
+
     for index, row in brand_level_data.iterrows():
         specs = row['all_specs']
 
@@ -122,22 +142,23 @@ def convert_to_all_columns(brand_level_data):
                 # Attempt to convert if specs is a string representation of a dictionary
                 specs = ast.literal_eval(specs)
             except (ValueError, SyntaxError):
-                # If conversion fails, skip processing this row
                 continue
 
-        # Process dictionary and update the DataFrame
+        # Only process if it's a valid dictionary
         if isinstance(specs, dict):
-            for key, value in specs.items():
-                if key not in brand_level_data.columns:
-                    brand_level_data[key] = None  # Add new column if it doesn't exist
-                brand_level_data.at[index, key] = value
+            rows_to_expand.append(pd.Series(specs, name=index))
+
+    # Create a new DataFrame from the extracted specs and merge it
+    if rows_to_expand:
+        specs_df = pd.DataFrame(rows_to_expand)
+        brand_level_data = pd.concat([brand_level_data, specs_df], axis=1)
 
     return brand_level_data
-competitor_data=convert_to_all_columns(competitor_data)
-self_data=convert_to_all_columns(self_data)
-competitor_data=competitor_data[competitor_data['ratings_count'] != ""]
 
 
+competitor_data = convert_to_all_columns(competitor_data)
+self_data = convert_to_all_columns(self_data)
+competitor_data = competitor_data[competitor_data['ratings_count'] != ""]
 # Create an empty dictionary to store column statistics
 d = {}
 
@@ -146,30 +167,43 @@ for column in competitor_data.columns:
     try:
         unique_count = competitor_data[column].nunique()
         not_na_percentage = competitor_data[column].notna().mean() * 100
-        unique_values_list = competitor_data[column].unique().tolist()  # Get the list of unique values
+        unique_values_list = competitor_data[column].dropna().unique().tolist()
         d[column] = [unique_count, not_na_percentage, unique_values_list]
-
-    except:
-        # Handle errors by converting the column to string type
+    except Exception:
         competitor_data[column] = competitor_data[column].astype(str)
         unique_count = competitor_data[column].nunique()
         not_na_percentage = competitor_data[column].notna().mean() * 100
-        unique_values_list = competitor_data[column].unique().tolist()  # Get the list of unique values
+        unique_values_list = competitor_data[column].dropna().unique().tolist()
         d[column] = [unique_count, not_na_percentage, unique_values_list]
+
+
 
 # Convert the dictionary into a DataFrame
 column_stats_df = pd.DataFrame.from_dict(d, orient='index', columns=['Unique Values', '% Not NaN', 'Unique Values List'])
 column_stats_df.reset_index(inplace=True)
 column_stats_df.rename(columns={'index': 'Column Name'}, inplace=True)
 
-df=column_stats_df.sort_values("% Not NaN",ascending=False)
-not_to_consider_columns=['productDescription','productImagesCount','productVideosCount','Country of Origin','flipkart_assured','special_price',
-                         'title','rating','ratings_count','reviews_count','Seller Name','highlights','description','specifications','reviews',
-                         'image_link','all_specs','brand','Model Name','mrp']
-df=df[(df['Unique Values'] != df['Unique Values'].max())& (df['Unique Values'] !=1)& (~df['Column Name'].isin(not_to_consider_columns))]
-general.print_sheet(1,df,'research_of_attributes',output_sheet,1,1,1)
-input_df=general.read_sheet(output_sheet,'attribute',1)
+df = column_stats_df
+not_to_consider_columns = [
+    'productDescription', 'productImagesCount', 'productVideosCount', 'Country of Origin', 'flipkart_assured', 'special_price',
+    'title', 'rating', 'ratings_count', 'reviews_count', 'Seller Name', 'highlights', 'description', 'specifications', 'reviews',
+    'image_link', 'all_specs', 'brand', 'Model Name', 'mrp','Model ID'
+]
 
+
+df = df[(df['Unique Values'] != df['Unique Values'].max()) & (df['Unique Values'] != 1) & (~df['Column Name'].isin(not_to_consider_columns))]
+
+def clip_to_max(x):
+    x=str(x)
+    if len(x)>49990:
+        return x[:49990]
+    else:
+        return x
+df['Unique Values List']=df['Unique Values List'].apply(clip_to_max)
+df=df.sort_values(by='% Not NaN',ascending=False)
+general.print_sheet(1, df, 'research_of_attributes', output_sheet, 1, 1, 1)
+
+input_df = general.read_sheet(output_sheet, 'attribute', 1)
 def extract_number(text):
     numbers=re.findall(r'\d+',str(text))
     if len(numbers) != 0:
@@ -179,6 +213,8 @@ def extract_number(text):
     return ans
 
 # function is created to format data 
+competitor_data['Brand']=competitor_data['title'].str.split(" ").str[0]
+self_data['Brand']=self_data['title'].str.split(" ").str[0]
 dynamic_range_vars={}
 dynamic_categorical_values={}
 for index,row in input_df.iterrows():
@@ -280,7 +316,9 @@ for self_index,self_row in self_data.iterrows():
                     temp=temp[temp[categorical_list_column].isin(dynamic_categorical_values[categorical_list_column])]
                     temp.insert(1, f'self_{categorical_list_column}', self_row[categorical_list_column])
                     print(len(temp))
+
         temp=temp[temp['Brand']!= self_row['Brand']]
+
 
     if not temp.empty:
         temp.insert(0, 'self_fsn', self_row['fsn'])
@@ -306,4 +344,14 @@ try:
 except:
     pass
 # Now call your function to print to the sheet
+general.add_sheet_name(output_sheet,'competitor output',1)
 general.print_sheet(1, final_df, 'competitor output', output_sheet, 1, 1, 1)
+self_data = self_data.astype({col: 'string' for col in self_data.select_dtypes(['category']).columns})
+competitor_data = competitor_data.astype({col: 'string' for col in competitor_data.select_dtypes(['category']).columns})
+# Check if NaNs still exist and fill them with an empty string
+self_data = self_data.fillna(' ')
+competitor_data = competitor_data.fillna(' ')
+general.add_sheet_name(output_sheet,'self_dump',1)
+general.print_sheet(1, self_data, 'self_dump', output_sheet, 1, 1, 1)
+general.add_sheet_name(output_sheet,'competitor_dump',1)
+general.print_sheet(1, competitor_data, 'competitor_dump', output_sheet, 1, 1, 1)
