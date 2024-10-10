@@ -164,3 +164,4 @@ venv
 key.json
 .json
 key1.json
+client_secrets.json
