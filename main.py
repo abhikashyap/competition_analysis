@@ -5,6 +5,7 @@ import analysis_function as f
 from scrapper import fk_scrapper_functions as sc
 from scrapper import flipkart_json_scrapper_with_all_specifications as fk_scrapper
 from scrapper.all_fsn_list import collect_all_data_ids
+# from scrapper.fk_scrapper_functions import collect_all_data_ids
 
 st.set_page_config(layout="wide")
 
@@ -251,7 +252,8 @@ if len(all_fsns) > 0:
         filter_col1, filter_col2 = st.columns(2)
         with filter_col1:
             # **Updated Code to Select All Brands by Default**
-            selected_brand = st.multiselect("Select brand names", brand_filtered, default=brand_filtered)
+            # selected_brand = st.multiselect("Select brand names", brand_filtered, default=brand_filtered)
+            selected_brand = st.multiselect("Select brand names", brand_filtered)
         features_to_analyze = final_scrapped_data[
             (final_scrapped_data['brand'].isin(selected_brand)) &
             (final_scrapped_data['final_selling_price'] >= lower_price) &

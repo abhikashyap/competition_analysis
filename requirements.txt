@@ -16,6 +16,7 @@ httpx
 fuzzywuzzy
 selectolax
 streamlit_plotly_events
+fake_useragent
 
 # graph resgression brand name and product detail
 # price range
